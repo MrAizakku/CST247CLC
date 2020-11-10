@@ -1,0 +1,3 @@
+This folder contains the SCRUM planning artifacts for the CLC group consisting of...
+   1. Kurt Newcomb
+   2. Isaac Tucker
