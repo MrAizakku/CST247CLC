@@ -12,7 +12,12 @@ namespace CST247CLC.Services.Business
         public bool Authenticate(User user)
         {
             SecurityDAO service = new SecurityDAO();
-            return service.FindByUser(user);
+            return service.LoginValidationByUserPass(user);
+        }
+        public bool Register(User user)
+        {
+            SecurityDAO service = new SecurityDAO();
+            return service.Register(user);
         }
     }
 }
