@@ -15,7 +15,7 @@ namespace CST247CLC
 
             routes.MapRoute(
                 name: "Login",
-                url: "{controller}/{action}/{id}",
+                url: "{Login}",
                 defaults: new { controller = "Login", action = "Index", id = UrlParameter.Optional }
             );
 
