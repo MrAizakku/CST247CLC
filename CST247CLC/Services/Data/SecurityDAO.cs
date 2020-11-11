@@ -12,7 +12,7 @@ namespace CST247CLC.Services.Data
         public bool FindByUser(User user)
         {
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Minesweeper;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            string query = $"SELECT rtrim(USERNAME) FROM dbo.Users WHERE USERNAME = @Username";
+            string query = $"SELECT rtrim(USERNAME) FROM dbo.Users WHERE USERNAME = @Username AND PASSWORD = @Password";
             bool results = false;       //default assumption of result
 
             using (SqlConnection con = new SqlConnection(connectionString)) //using ensures connections are closed after use.
@@ -22,6 +22,7 @@ namespace CST247CLC.Services.Data
                 {
                     comm.Connection.Open();
                     comm.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 50).Value = user.Username;
+                    comm.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 50).Value = user.Password;
                     SqlDataReader reader = comm.ExecuteReader();
                     if (reader.HasRows) { results = true; }
                 }
