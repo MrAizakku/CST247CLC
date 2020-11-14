@@ -1,10 +1,4 @@
-﻿/*
- * Isaac Tucker
- * CST-227 Enterprise Applications 2
- * Milestone
- * 10/10/2020 update: I have separated Board.cs and Cell.cs into their own library to be referenced by the console and GUI version of the application.
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
