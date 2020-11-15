@@ -36,7 +36,7 @@ namespace CST247CLC.Services.Data
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TestDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             string query = $"INSERT INTO Users (USERNAME, PASSWORD, FIRSTNAME, LASTNAME, SEX, AGE, STATE, EMAIL) VALUES (@Username, @Password, @FirstName, @Lastname, @Sex, @Age, @State, @Email)";
             bool results = false;       //default assumption of result
-            //Check to see if the user data made it to the server in a valid configuration, meaning that all of the fields have something in them, and the email field contains an @ sign, could be upgraded later.
+            
             if (ValidateUser(user))
             {
                 using (SqlConnection con = new SqlConnection(connectionString)) //'using' ensures connections are closed after use.
@@ -49,15 +49,16 @@ namespace CST247CLC.Services.Data
                     comm.Parameters.AddWithValue("@Sex", user.Sex);
                     comm.Parameters.AddWithValue("@Age", user.Age);
                     comm.Parameters.AddWithValue("@State", user.State);
-                    comm.Parameters.AddWithValue("@Email",  user.Email);
+                    comm.Parameters.AddWithValue("@Email", user.Email);
                     try
                     {
                         comm.Connection.Open();
                         comm.ExecuteNonQuery();
                         results = true;
                     }
-                    catch (Exception ex) { 
-                        Console.WriteLine(ex.Message); 
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
                     }
                 }
 
@@ -71,9 +72,9 @@ namespace CST247CLC.Services.Data
         {
             bool validUser = false;
             if (user.FirstName.Length != 0 && 
-                user.LastName.Length != 0 && 
-                user.Sex.Length != 0 && 
-                user.Age.ToString().Length != 0 && 
+                user.LastName.Length != 0 &&
+                user.Sex.Length != 0 &&
+                user.Age.ToString().Length != 0 &&
                 user.State.ToString().Length != 0 &&
                 (user.Email.ToString().Length != 0 || !user.Email.Contains("@")) &&
                 user.Username.Length != 0 &&
