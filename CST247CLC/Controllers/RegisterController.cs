@@ -20,11 +20,18 @@ namespace CST247CLC.Controllers
         [HttpPost]
         public ActionResult Register(User model)
         {
-            SecurityDAOService sservice = new SecurityDAOService();
-            bool results = sservice.Register(model);
-            if (results)
+            if (ModelState.IsValid)
             {
-                return View("RegistrationSuccess", model);
+                SecurityDAOService sservice = new SecurityDAOService();
+                bool results = sservice.Register(model);
+                if (results)
+                {
+                    return View("RegistrationSuccess", model);
+                }
+                else
+                {
+                    return View("RegistrationFailed");
+                }
             }
             else
             {

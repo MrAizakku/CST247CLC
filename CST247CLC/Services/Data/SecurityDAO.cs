@@ -11,7 +11,7 @@ namespace CST247CLC.Services.Data
     {
         public bool LoginValidationByUserPass(User user)
         {
-            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TestDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Minesweeper;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             string query = $"SELECT rtrim(USERNAME) FROM dbo.Users WHERE USERNAME = @Username AND PASSWORD = @Password";
             bool results = false;       //default assumption of result
 
@@ -33,7 +33,7 @@ namespace CST247CLC.Services.Data
 
         public bool Register(User user)
         {
-            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TestDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Minesweeper;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             string query = $"INSERT INTO Users (USERNAME, PASSWORD, FIRSTNAME, LASTNAME, SEX, AGE, STATE, EMAIL) VALUES (@Username, @Password, @FirstName, @Lastname, @Sex, @Age, @State, @Email)";
             bool results = false;       //default assumption of result
             
