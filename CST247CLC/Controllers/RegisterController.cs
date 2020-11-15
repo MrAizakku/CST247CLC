@@ -35,7 +35,7 @@ namespace CST247CLC.Controllers
             }
             else
             {
-                return View("RegistrationFailed");
+                return View(model);
             }
         }
     }
