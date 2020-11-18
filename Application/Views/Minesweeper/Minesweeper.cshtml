@@ -3,30 +3,41 @@
     ViewBag.Title = "Minesweeper";
     Layout = "~/Views/Shared/_MyDefaultLayout.cshtml";
 }
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}
 
 <h2>Minesweeper</h2>
-@using (Html.BeginForm("OnButtonClick", "Minesweeper"))
-{
-    for (int row = Model.size - 1; row >= 0; --row)
+<div class="container" style="font-size:0px">
+    @using (Html.BeginForm("OnButtonClick", "Minesweeper"))
     {
-        for (int column = 0; column < Model.size; column++)
+        for (int row = Model.size - 1; row >= 0; --row)
         {
-            string MineID = row + "|" + column;
-            if (column % Model.size == 0) { <br /> }
-            
-            <button type="submit" name="mine" value=@MineID>
-                @if (Model.grid[row, column].isVisited)
-                {
-                    @Html.DisplayFor(Model => Model.grid[row, column].numOfLiveNeighbors);
-                }
-                else
-                {
-                    <i>?</i>
-                }
-            </button>
-        }
+            for (int column = 0; column < Model.size; column++)
+            {
+                string MineID = row + "|" + column;
+                if (column % Model.size == 0)
+                {<br /> }
 
+                <button class="minesweeper" style="" type="submit" name="mine" value=@MineID>
+                    @if (Model.grid[row, column].isVisited)
+                    {
+                        @Html.DisplayFor(Model => Model.grid[row, column].numOfLiveNeighbors);
+                    }
+                    else
+                    {
+                        <i>?</i>
+                    }
+                </button>
+            }
+
+        }
     }
-}
+</div>
 
 

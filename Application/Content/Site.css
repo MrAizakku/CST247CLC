@@ -35,3 +35,16 @@ td, th {
 tr:nth-child(even) {
     background-color: #dddddd;
 }
+
+.minesweeper {
+    border: 1px outset blue;
+    background-color: lightBlue;
+    margin: 0;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: inherit;
+    padding: 4px 12px;
+    height: 50px;
+    width: 50px;
+}
+

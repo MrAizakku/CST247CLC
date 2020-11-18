@@ -54,11 +54,14 @@ namespace CST247CLC.Controllers
             if (!currentCell.isVisited)
             {
                 //check if cell is a bomb
-                myBoard.checkForBomb(currentCell);
-                //have all non bomb cells been visisted?
-                //else if (myBoard.checkForVictory()) { GameOver("win"); return; }
-                //update the buttons
-                //else { //updateButtonLabels(); }
+                if(myBoard.checkForBomb(currentCell)) //this will reveal and flood fill n everything AND let us know if a bomb was hit.
+                {
+                    ViewBag.Message = "You hit a bomb!";
+                } 
+                else if (myBoard.checkForVictory())
+                {
+                    //game over. win
+                }
             }
         }
     }
