@@ -17,7 +17,7 @@
             <button type="submit" name="mine" value=@MineID>
                 @if (Model.grid[row, column].isVisited)
                 {
-                    Model.grid[row, column].numOfLiveNeighbors.ToString();
+                    @Html.DisplayFor(Model => Model.grid[row, column].numOfLiveNeighbors);
                 }
                 else
                 {

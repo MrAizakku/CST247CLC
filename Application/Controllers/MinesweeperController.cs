@@ -13,12 +13,15 @@ namespace CST247CLC.Controllers
         // GET: Minesweeper
         public ActionResult Index()
         {
+            myBoard.difficulty = 15;
+            myBoard.setupLiveNeighbors();
+            myBoard.calculateLiveNeighbors();
             return View("Minesweeper", myBoard);
         }
 
-        public ActionResult OnButtonClick(string MineID)
+        public ActionResult OnButtonClick(string mine)
         {
-            string[] strArr = MineID.Split('|');
+            string[] strArr = mine.Split('|');
             int r = int.Parse(strArr[0]);
             int c = int.Parse(strArr[1]);
 
