@@ -1,8 +1,28 @@
-﻿
+﻿@model MinesweeperModels.Board
 @{
     ViewBag.Title = "Minesweeper";
     Layout = "~/Views/Shared/_MyDefaultLayout.cshtml";
 }
 
 <h2>Minesweeper</h2>
+@using (Html.BeginForm("OnButtonClick", "Minesweeper"))
+{
+    for (int row = Model.size - 1; row >= 0; --row)
+    {
+        for (int column = 0; column < Model.size; column++)
+        {
+            if (column % Model.size == 0) { <br /> }
+            if (Model.grid[row, column].isVisited)
+            {
+                <button type="submit" name="mine">@Model.grid[row, column].numOfLiveNeighbors.ToString()</button>
+            }
+            else
+            {
+                <button type="submit" name="mine">?</button>
+            }
+        }
+
+    }
+}
+
 
