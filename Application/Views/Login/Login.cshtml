@@ -1,21 +1,15 @@
 ﻿@model CST247CLC.Models.User
 
 @{
-    Layout = null;
+    ViewBag.Title = "Minesweeper CLC";
+    Layout = "~/Views/Shared/_MyDefaultLayout.cshtml";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Login</title>
-</head>
-<body>
-    @using (Html.BeginForm("Login", "Login", FormMethod.Post)) 
+<div>
+    @using (Html.BeginForm("Login", "Login", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        
+
         <div class="form-horizontal">
             <h4>User</h4>
             <hr />
@@ -27,7 +21,7 @@
                     @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
                 </div>
             </div>
-    
+
             <div class="form-group">
                 @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -35,7 +29,7 @@
                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                 </div>
             </div>
-    
+
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="Login" class="btn btn-default" />
@@ -43,9 +37,8 @@
             </div>
         </div>
     }
-    
+
     <div>
         @Html.ActionLink("Back to List", "Index")
     </div>
-</body>
-</html>
+</div>
