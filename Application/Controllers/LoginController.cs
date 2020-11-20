@@ -24,6 +24,7 @@ namespace CST247CLC.Controllers
             bool results = sservice.Authenticate(model);
             if (results)
             {
+                model = sservice.LoadUser(model);
                 return View("LoginSuccess", model);
             }
             else

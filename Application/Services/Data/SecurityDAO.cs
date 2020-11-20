@@ -9,9 +9,10 @@ namespace CST247CLC.Services.Data
 {
     public class SecurityDAO
     {
+        private readonly string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Minesweeper;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         public bool LoginValidationByUserPass(User user)
         {
-            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Minesweeper;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            
             string query = $"SELECT rtrim(USERNAME) FROM dbo.Users WHERE USERNAME = @Username AND PASSWORD = @Password";
             bool results = false;       //default assumption of result
 
@@ -31,9 +32,42 @@ namespace CST247CLC.Services.Data
             return results;
         }
 
+        public User LoadUser(User user)
+        {
+            string query = $"SELECT * FROM dbo.Users WHERE USERNAME = @Username AND PASSWORD = @Password";
+            User save = new User();
+            using (SqlConnection con = new SqlConnection(connectionString)) //'using' ensures connections are closed after use.
+            {
+                SqlCommand comm = new SqlCommand(query, con);
+                try
+                {
+                    comm.Connection.Open();
+                    comm.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 50).Value = user.Username;
+                    comm.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 50).Value = user.Password;
+
+                    SqlDataReader reader = comm.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        save.Username = reader["Username"].ToString();
+                        save.Password = reader["Password"].ToString();
+                        save.FirstName = reader["FirstName"].ToString();
+                        save.LastName = reader["LastName"].ToString();
+                        save.Sex = reader["Sex"].ToString();
+                        save.Age = (int)reader["Age"];
+                        save.State = reader["State"].ToString();
+                        save.Email = reader["Email"].ToString();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                return save;
+            }
+        }
+
         public bool Register(User user)
         {
-            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Minesweeper;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             string query = $"INSERT INTO Users (USERNAME, PASSWORD, FIRSTNAME, LASTNAME, SEX, AGE, STATE, EMAIL) VALUES (@Username, @Password, @FirstName, @Lastname, @Sex, @Age, @State, @Email)";
             bool results = false;       //default assumption of result
             

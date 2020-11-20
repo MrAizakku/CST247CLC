@@ -19,5 +19,10 @@ namespace CST247CLC.Services.Business
             SecurityDAO service = new SecurityDAO();
             return service.Register(user);
         }
+        public User LoadUser(User user)
+        {
+            SecurityDAO service = new SecurityDAO();
+            return service.LoadUser(user);
+        }
     }
 }

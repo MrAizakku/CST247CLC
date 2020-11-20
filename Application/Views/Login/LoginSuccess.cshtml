@@ -1,10 +1,10 @@
-﻿
+﻿@model CST247CLC.Models.User
 @{
     ViewBag.Title = "Minesweeper CLC";
     Layout = "~/Views/Shared/_MyDefaultLayout.cshtml";
 }
 
 <div>
-    Login Success!
+    Login Success! Welcome @Html.DisplayFor(model => model.FirstName) !
 </div>
 
