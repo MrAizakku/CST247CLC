@@ -6,14 +6,31 @@
 @if (ViewBag.Message != null)
 {
     <script type="text/javascript">
-            window.onload = function () {
-                alert("@ViewBag.Message");
-            };
+        window.onload = function () {
+            alert("@ViewBag.Message");
+        };
     </script>
 }
+<script>
+    $(document).ready(function () {
+        $(document).contextmenu(function () {
+            return false;
+        });
+        $('.minesweeper').mousedown(function (event) {
+            if (event.which == 3) {
+                console.log("event 3. right click");
+                //URL, DATA, callback
+                $.post("@Url.Action("OnButtonRightClick", "Minesweeper")", {mine: this.getAttribute("value")}, function (data) {
+                    console.log(data);
+                    $("body").html(data);
+                });
+            }
+        });
+    });
+</script>
 
 <h2>Minesweeper</h2>
-<div class="container" style="font-size:0px">
+<div class="container">
     @using (Html.BeginForm("OnButtonClick", "Minesweeper"))
     {
         for (int row = Model.size - 1; row >= 0; --row)
@@ -24,20 +41,24 @@
                 if (column % Model.size == 0)
                 {<br /> }
 
-                <button class="minesweeper" style="" type="submit" name="mine" value=@MineID>
-                    @if (Model.grid[row, column].isVisited)
+                <button class="minesweeper" type="submit" name="mine" value=@MineID>
+                   @if (Model.grid[row, column].isVisited)
                     {
-                        @Html.DisplayFor(Model => Model.grid[row, column].numOfLiveNeighbors);
-                    }
-                    else
-                    {
-                        <i>?</i>
-                    }
+                        @Html.DisplayFor(M => M.grid[row, column].numOfLiveNeighbors)
+                   }
+                   else if (Model.grid[row, column].isFlagged)
+                   {
+                        <img src="~/Images/f.png" style="width:30px;height:30px;"/>
+                   }
+                   else
+                   {
+                       <i>?</i>
+                   }
+                    
                 </button>
             }
 
         }
     }
 </div>
-
 

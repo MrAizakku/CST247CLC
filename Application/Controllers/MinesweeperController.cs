@@ -9,43 +9,41 @@ namespace CST247CLC.Controllers
 {
     public class MinesweeperController : Controller
     {
-        static public Board myBoard = new Board(10);
+        static public Board myBoard;
         // GET: Minesweeper
         public ActionResult Index()
         {
-            myBoard.difficulty = 15;
-            myBoard.setupLiveNeighbors();
-            myBoard.calculateLiveNeighbors();
+            if(myBoard==null)
+            {
+                myBoard = new Board(10);
+                myBoard.difficulty = 15;
+                myBoard.setupLiveNeighbors();
+                myBoard.calculateLiveNeighbors();
+            }
             return View("Minesweeper", myBoard);
         }
 
-        public ActionResult OnButtonClick(string mine)
+        public ActionResult OnButtonRightClick(string mine)
         {
             string[] strArr = mine.Split('|');
             int r = int.Parse(strArr[0]);
             int c = int.Parse(strArr[1]);
-
             Cell currentCell = myBoard.grid[r, c];
 
-            //run game logic
+            if (!currentCell.isVisited)
+                currentCell.isFlagged = !currentCell.isFlagged;
+            return View("Minesweeper", myBoard);
+        }
+
+            public ActionResult OnButtonClick(string mine)
+        {
+            string[] strArr = mine.Split('|');
+            int r = int.Parse(strArr[0]);
+            int c = int.Parse(strArr[1]);
+            Cell currentCell = myBoard.grid[r, c];
+
             if (!currentCell.isFlagged)
                 gameLogic(currentCell);
-
-            /*
-            if (me.Button == MouseButtons.Left)
-            {
-                if (!currentCell.isFlagged)
-                    gameLogic(currentCell);
-            }
-            else if (me.Button == MouseButtons.Right)
-            {
-                if (!currentCell.isVisited)
-                {
-                    currentCell.isFlagged = !currentCell.isFlagged;
-                    updateButtonLabels();
-                }
-            } */
-
             return View("Minesweeper", myBoard);
         }
 
