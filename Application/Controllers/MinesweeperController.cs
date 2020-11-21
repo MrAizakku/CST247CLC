@@ -14,8 +14,10 @@ namespace CST247CLC.Controllers
         // GET: Minesweeper
         public ActionResult Index()
         {
-            if(myBoard==null)
+            if(myBoard==null || GameOver==true)
             {
+                GameOver = false;
+                ViewBag.Message = "New Game!";
                 myBoard = new Board(10);
                 myBoard.difficulty = 15;
                 myBoard.setupLiveNeighbors();
