@@ -10,6 +10,7 @@ namespace CST247CLC.Controllers
     public class MinesweeperController : Controller
     {
         static public Board myBoard;
+        static public bool GameOver = false;
         // GET: Minesweeper
         public ActionResult Index()
         {
@@ -25,25 +26,31 @@ namespace CST247CLC.Controllers
 
         public ActionResult OnButtonRightClick(string mine)
         {
-            string[] strArr = mine.Split('|');
-            int r = int.Parse(strArr[0]);
-            int c = int.Parse(strArr[1]);
-            Cell currentCell = myBoard.grid[r, c];
+            if (!GameOver)
+            {
+                string[] strArr = mine.Split('|');
+                int r = int.Parse(strArr[0]);
+                int c = int.Parse(strArr[1]);
+                Cell currentCell = myBoard.grid[r, c];
 
-            if (!currentCell.isVisited)
-                currentCell.isFlagged = !currentCell.isFlagged;
+                if (!currentCell.isVisited)
+                    currentCell.isFlagged = !currentCell.isFlagged;
+            }
             return View("Minesweeper", myBoard);
         }
 
-            public ActionResult OnButtonClick(string mine)
+        public ActionResult OnButtonClick(string mine)
         {
-            string[] strArr = mine.Split('|');
-            int r = int.Parse(strArr[0]);
-            int c = int.Parse(strArr[1]);
-            Cell currentCell = myBoard.grid[r, c];
+            if (!GameOver)
+            {
+                string[] strArr = mine.Split('|');
+                int r = int.Parse(strArr[0]);
+                int c = int.Parse(strArr[1]);
+                Cell currentCell = myBoard.grid[r, c];
 
-            if (!currentCell.isFlagged)
-                gameLogic(currentCell);
+                if (!currentCell.isFlagged)
+                    gameLogic(currentCell);
+            }
             return View("Minesweeper", myBoard);
         }
 
@@ -54,11 +61,13 @@ namespace CST247CLC.Controllers
                 //check if cell is a bomb
                 if(myBoard.checkForBomb(currentCell)) //this will reveal and flood fill n everything AND let us know if a bomb was hit.
                 {
-                    ViewBag.Message = "You hit a bomb!";
+                    ViewBag.Message = "You hit a bomb! Game Over!";
+                    GameOver = true;
                 } 
                 else if (myBoard.checkForVictory())
                 {
-                    //game over. win
+                    ViewBag.Message = "You Win! Game Over!";
+                    GameOver = true;
                 }
             }
         }
