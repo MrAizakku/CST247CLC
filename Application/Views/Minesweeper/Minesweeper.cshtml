@@ -46,8 +46,15 @@
 
                 <button class="minesweeper" type="submit" name="mine" value=@MineID>
                   @if (Model.grid[row, column].isVisited)
-                   {
-                        <img src="~/Images/@image" style="width:30px;height:30px;"/>
+                  {
+                      if (Model.grid[row, column].isLive)
+                      {
+                          <img src="~/Images/b.png" style="width:30px;height:30px;"/>
+                      }
+                      else
+                      {
+                          <img src="~/Images/@image" style="width:30px;height:30px;"/>
+                      }
                    }
                    else if (Model.grid[row, column].isFlagged)
                    {
@@ -55,7 +62,7 @@
                    }
                    else
                    {
-                       <i>?</i>
+                        <img src="~/Images/q.png" style="width:30px;height:30px;"/>
                    }
                     
                 </button>

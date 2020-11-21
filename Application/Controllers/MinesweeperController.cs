@@ -64,6 +64,7 @@ namespace CST247CLC.Controllers
                 if(myBoard.checkForBomb(currentCell)) //this will reveal and flood fill n everything AND let us know if a bomb was hit.
                 {
                     ViewBag.Message = "You hit a bomb! Game Over!";
+                    myBoard.revealBoard();
                     GameOver = true;
                 } 
                 else if (myBoard.checkForVictory())

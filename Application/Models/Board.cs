@@ -42,11 +42,21 @@ namespace MinesweeperModels
             {
                 for (int col = 0; col < size; col++)
                 {
-                    if(!grid[row,col].isVisited&&!grid[row, col].isLive) //if non bomb cells exist that are not bombs, game isn't over
+                    if (!grid[row, col].isVisited && !grid[row, col].isLive) //if non bomb cells exist that are not bombs, game isn't over
                     { return false; }
                 }
             }
             return true;
+        }
+        public void revealBoard() //set all to visisted so view will display all
+        {
+            for (int row = 0; row < size; row++)
+            {
+                for (int col = 0; col < size; col++)
+                {
+                    grid[row, col].isVisited = true;
+                }
+            }
         }
 
         /*Instructios: Add a method to the Board class called floodFill(int row, int col) This method should be recursive. Inside the floodFill method, mark cells as “visited” = true when they are included in the block of affected cells. Recursively call floodfill on surrounding cells
