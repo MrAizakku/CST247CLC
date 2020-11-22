@@ -24,7 +24,7 @@ namespace CST247CLC.Models
         [Range(1,99)]
         public int Age{ get; set; }
         [Required]
-        [StringLength(50, MinimumLength = 5)]
+        [StringLength(50, MinimumLength = 4)]
         public string State { get; set; }
         [Required] 
         [EmailAddress]
