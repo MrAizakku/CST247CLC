@@ -10,8 +10,9 @@ namespace MinesweeperModels
         public Cell[,] grid { get; set; }   //to hold the collection of cells that is the board
         public List<Cell> bombList { get; set; }    //hold the list of bombs
         public int difficulty { get; set; }     //indicate amount of bombs
+        public string gameAlert { get; set; }     //message to user
 
-   
+
         public Board(int size)
         {
             /*The constructor for the Board should have a single parameter 

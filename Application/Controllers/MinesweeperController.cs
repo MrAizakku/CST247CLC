@@ -17,11 +17,11 @@ namespace CST247CLC.Controllers
             if(myBoard==null || GameOver==true)
             {
                 GameOver = false;
-                ViewBag.Message = "New Game!";
                 myBoard = new Board(10);
                 myBoard.difficulty = 15;
                 myBoard.setupLiveNeighbors();
                 myBoard.calculateLiveNeighbors();
+                myBoard.gameAlert = "New Game!";
             }
             return View("Minesweeper", myBoard);
         }
@@ -38,7 +38,7 @@ namespace CST247CLC.Controllers
                 if (!currentCell.isVisited)
                     currentCell.isFlagged = !currentCell.isFlagged;
             }
-            return View("Minesweeper", myBoard);
+            return PartialView("_Minesweeper", myBoard);
         }
 
         public ActionResult OnButtonClick(string mine)
@@ -53,7 +53,7 @@ namespace CST247CLC.Controllers
                 if (!currentCell.isFlagged)
                     gameLogic(currentCell);
             }
-            return View("Minesweeper", myBoard);
+            return PartialView("_Minesweeper", myBoard);
         }
 
         private void gameLogic(Cell currentCell)    //send logic to gameBoard for process and update the views accordingly.
@@ -63,13 +63,13 @@ namespace CST247CLC.Controllers
                 //check if cell is a bomb
                 if(myBoard.checkForBomb(currentCell)) //this will reveal and flood fill n everything AND let us know if a bomb was hit.
                 {
-                    ViewBag.Message = "You hit a bomb! Game Over!";
+                    myBoard.gameAlert = "You hit a bomb! Game Over!";
                     myBoard.revealBoard();
                     GameOver = true;
                 } 
                 else if (myBoard.checkForVictory())
                 {
-                    ViewBag.Message = "You Win! Game Over!";
+                    myBoard.gameAlert = "You Win! Game Over!";
                     GameOver = true;
                 }
             }
