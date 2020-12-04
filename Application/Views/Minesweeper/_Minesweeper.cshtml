@@ -16,7 +16,7 @@
                 //URL, DATA, callback
                 $.post("@Url.Action("OnButtonRightClick", "Minesweeper")", {mine: this.getAttribute("value")}, function (data) {
                     console.log(data);
-                    $("gameboard").html(data);
+                    $("#gameboard").html(data);
                 });
             }
         });
