@@ -1,5 +1,6 @@
 ﻿using CST247CLC.Models;
 using CST247CLC.Services.Business;
+using MinesweeperModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,9 @@ namespace CST247CLC.Controllers
             if (results)
             {
                 model = sservice.LoadUser(model);
-                return View("LoginSuccess", model);
+                Session["User"] = model;
+                Tuple<User, List<PlayerStat>> tuple = new Tuple<User, List<PlayerStat>>(model, model.stats);
+                return View("~/Views/Profile/Profile.cshtml", tuple);
             }
             else
             {

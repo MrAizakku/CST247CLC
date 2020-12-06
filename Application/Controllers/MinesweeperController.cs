@@ -1,9 +1,12 @@
-﻿using MinesweeperModels;
+﻿using CST247CLC.Models;
+using CST247CLC.Services.Business;
+using MinesweeperModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 
 namespace CST247CLC.Controllers
 {
@@ -11,10 +14,12 @@ namespace CST247CLC.Controllers
     {
         static public Board myBoard;
         static public bool GameOver = false;
+        User user; 
         // GET: Minesweeper
         public ActionResult Index()
         {
-            if(myBoard==null || GameOver==true)
+            user = Session["User"] as User;
+            if (myBoard==null || GameOver==true)
             {
                 GameOver = false;
                 myBoard = new Board(10);
@@ -58,6 +63,7 @@ namespace CST247CLC.Controllers
 
         private void gameLogic(Cell currentCell)    //send logic to gameBoard for process and update the views accordingly.
         {
+            ScoreDAOService scoreService = new ScoreDAOService();
             if (!currentCell.isVisited)
             {
                 //check if cell is a bomb
@@ -65,14 +71,43 @@ namespace CST247CLC.Controllers
                 {
                     myBoard.gameAlert = "You hit a bomb! Game Over!";
                     myBoard.revealBoard();
+                    PlayerStat newScore = new PlayerStat("loss");
+                    newScore.difficulty = "hard";
+                    newScore.timeLapsed = 100;
+                    newScore.flaggedBombCount = getFlaggedBombCount();
+                    newScore.calculateScore();
+                    //scoreService.SaveScore(user, newScore);
                     GameOver = true;
                 } 
                 else if (myBoard.checkForVictory())
                 {
+                    //Save Score
+                    PlayerStat newScore = new PlayerStat("win");
+                    newScore.difficulty = "ez";
+                    newScore.timeLapsed = 10;
+                    newScore.flaggedBombCount = getFlaggedBombCount();
+                    newScore.calculateScore();
+                    //scoreService.SaveScore(user, newScore);
                     myBoard.gameAlert = "You Win! Game Over!";
                     GameOver = true;
                 }
+                else
+                {
+                    //Keep Playing...
+                }
             }
         }
+
+        private int getFlaggedBombCount()
+        {
+            int flaggedBombCountNum = 0;
+            foreach (var item in myBoard.bombList)
+            {
+                if (item.isFlagged)
+                    flaggedBombCountNum++;
+            }
+            return flaggedBombCountNum;
+        }
+
     }
 }

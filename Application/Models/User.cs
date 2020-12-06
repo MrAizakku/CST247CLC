@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CST247CLC.Services.Business;
+using MinesweeperModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -38,5 +40,14 @@ namespace CST247CLC.Models
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$", ErrorMessage = @"Password must contain a number, one lowercase, one uppercase, one symbol, and be 8 - 15 characters.")]
         [StringLength(15, MinimumLength = 8)]
         public string Password { get; set; }
+        public List<PlayerStat> stats { get; set; }
+
+
+        public List<PlayerStat> getStats()
+        {
+            ScoreDAOService service = new ScoreDAOService();
+            return service.fetchStats(this.UserID);
+        }
+
     }
 }

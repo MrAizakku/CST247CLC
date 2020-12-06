@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CST247CLC.Models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -16,10 +17,16 @@ namespace MinesweeperModels
 
         public PlayerStat()     //prebuild the stat with empty fields.
         {
-            playerName = "-----";
             difficulty = "-----";
             timeLapsed = 0;
             flaggedBombCount = 0;
+        }
+        public PlayerStat(string gameWinOrLoss)     
+        {
+            difficulty = "-----";
+            timeLapsed = 0;
+            flaggedBombCount = 0;
+            gameResult = gameWinOrLoss;
         }
 
         public void calculateScore()
@@ -28,13 +35,13 @@ namespace MinesweeperModels
             int scoreModifier = (gameResult == "win" ? (500 - timeLapsed) : (250 - timeLapsed));
             if (scoreModifier < 100) scoreModifier = 100;
             score =  flaggedBombCount * scoreModifier;
+
         }
 
         public int CompareTo(object obj)
         {
             if (obj == null) return 1;
             PlayerStat p2 = (PlayerStat)obj;
-
             if (this.score < p2.score)
                 return 1;
             if (this.score > p2.score)

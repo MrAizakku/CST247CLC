@@ -1,0 +1,54 @@
+﻿@using CST247CLC.Models
+
+@model Tuple<User, List<MinesweeperModels.PlayerStat>>
+
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_MyDefaultLayout.cshtml";
+}
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .sColumn {
+        float: left;
+        width: 50%;
+        padding: 10px;
+    }
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+</style>
+
+<h2>User Landing Page</h2>
+
+
+@using (Html.BeginForm("Index", "Minesweeper", FormMethod.Post))
+{
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="New Game" class="btn btn-default" />
+        </div>
+    </div>
+}
+
+
+<div class="row">
+    <div class="row">
+        <div class="sColumn" style="background-color:#aaa;">
+            <h2>Global Scores</h2>
+            @Html.Partial("~/Views/Profile/_GlobalScores.cshtml", Model.Item2)
+        </div>
+        <div class="sColumn" style="background-color:#bbb;">
+            <h2>Personal Scores</h2>
+            @Html.Partial("~/Views/Profile/_PersonalScores.cshtml", Model.Item1.stats)
+        </div>
+    </div>
+</div>
+
+

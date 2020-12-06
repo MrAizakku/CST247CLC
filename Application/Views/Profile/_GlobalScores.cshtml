@@ -1,0 +1,37 @@
+﻿
+@model IEnumerable<MinesweeperModels.PlayerStat>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.playerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.difficulty)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.timeLapsed)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.score)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.playerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.difficulty)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.timeLapsed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.score)
+            </td>
+        </tr>
+    }
+</table>

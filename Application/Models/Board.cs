@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Timers;
 
 namespace MinesweeperModels
 {
@@ -11,7 +12,7 @@ namespace MinesweeperModels
         public List<Cell> bombList { get; set; }    //hold the list of bombs
         public int difficulty { get; set; }     //indicate amount of bombs
         public string gameAlert { get; set; }     //message to user
-
+        public Timer timer { get; set; }
 
         public Board(int size)
         {
@@ -20,6 +21,7 @@ namespace MinesweeperModels
              * should be initialized so that a Cell object is stored at each location.*/
             this.size = size;
             grid = new Cell[this.size, this.size];
+            this.timer = new Timer();
             initializeBoard();
         }
 
