@@ -14,7 +14,7 @@ namespace CST247CLC.Controllers
     {
         static public Board myBoard;
         static public bool GameOver = false;
-        User user; 
+        public static User user; 
         // GET: Minesweeper
         public ActionResult Index()
         {
@@ -63,7 +63,6 @@ namespace CST247CLC.Controllers
 
         private void gameLogic(Cell currentCell)    //send logic to gameBoard for process and update the views accordingly.
         {
-            ScoreDAOService scoreService = new ScoreDAOService();
             if (!currentCell.isVisited)
             {
                 //check if cell is a bomb
@@ -71,23 +70,12 @@ namespace CST247CLC.Controllers
                 {
                     myBoard.gameAlert = "You hit a bomb! Game Over!";
                     myBoard.revealBoard();
-                    PlayerStat newScore = new PlayerStat("loss");
-                    newScore.difficulty = "hard";
-                    newScore.timeLapsed = 100;
-                    newScore.flaggedBombCount = getFlaggedBombCount();
-                    newScore.calculateScore();
-                    //scoreService.SaveScore(user, newScore);
+                    SaveScore("lose", user);
                     GameOver = true;
-                } 
+                }
                 else if (myBoard.checkForVictory())
                 {
-                    //Save Score
-                    PlayerStat newScore = new PlayerStat("win");
-                    newScore.difficulty = "ez";
-                    newScore.timeLapsed = 10;
-                    newScore.flaggedBombCount = getFlaggedBombCount();
-                    newScore.calculateScore();
-                    //scoreService.SaveScore(user, newScore);
+                    SaveScore("win", user);
                     myBoard.gameAlert = "You Win! Game Over!";
                     GameOver = true;
                 }
@@ -96,6 +84,18 @@ namespace CST247CLC.Controllers
                     //Keep Playing...
                 }
             }
+        }
+
+        private void SaveScore(string result, User user) //playerstat model expects "win" or anything else.
+        {
+            ScoreDAOService scoreService = new ScoreDAOService();
+            PlayerStat newScore = new PlayerStat();
+            newScore.difficulty = "Normal";
+            newScore.gameResult = result;
+            newScore.timeLapsed = 100;
+            newScore.flaggedBombCount = getFlaggedBombCount();
+            newScore.calculateScore();
+            scoreService.SaveScore(user, newScore);
         }
 
         private int getFlaggedBombCount()

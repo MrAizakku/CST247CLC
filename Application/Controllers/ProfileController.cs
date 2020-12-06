@@ -14,12 +14,6 @@ namespace CST247CLC.Controllers
         // GET: Profile
         public ActionResult Index(User user)
         {
-            return View("Profile", user);
-        }
-
-
-        public ActionResult getGlobalScores(User user)
-        {
             ScoreDAOService s = new ScoreDAOService();
             Tuple<User, List<PlayerStat>> tuple = new Tuple<User, List<PlayerStat>>(user, s.getGlobalScores());
             return View("Profile", tuple);

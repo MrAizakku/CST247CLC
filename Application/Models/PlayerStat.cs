@@ -2,17 +2,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace MinesweeperModels
 {
     public class PlayerStat : IComparable
     {
+        [Display(Name = "Name")]
         public string playerName { get; set; }
+        [Display(Name = "Difficulty")]
         public string difficulty { get; set; }      //to keep track of difficulty played
         public string gameResult { get; set; }      //not really used at this time.
         public int flaggedBombCount { get; set; }   //used to assess points earned
+        [Display(Name = "Time")]
         public int timeLapsed { get; set; }
+        [Display(Name = "Score")]
         public int score { get; set; }              //calulated in method below...
 
         public PlayerStat()     //prebuild the stat with empty fields.
@@ -20,13 +25,6 @@ namespace MinesweeperModels
             difficulty = "-----";
             timeLapsed = 0;
             flaggedBombCount = 0;
-        }
-        public PlayerStat(string gameWinOrLoss)     
-        {
-            difficulty = "-----";
-            timeLapsed = 0;
-            flaggedBombCount = 0;
-            gameResult = gameWinOrLoss;
         }
 
         public void calculateScore()

@@ -10,28 +10,30 @@ namespace CST247CLC.Services.Data
 {
     public class ScoreDAO
     {
-        private readonly string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TestDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        private readonly string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Minesweeper;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         public bool SaveScore(User user, PlayerStat score)
         {
-            string query = $"INSERT INTO dbo.Scores (USERID, SCORE, DIFFICULTY, TIME) VALUES (@UserID, @Score, @Difficulty, @Time)";
+            string query = $"INSERT INTO dbo.Scores (userID, score, difficulty, timeElapsed) VALUES (@UserID, @Score, @Difficulty, @Time)";
             bool results = false;       //default assumption of result
-
-            using (SqlConnection con = new SqlConnection(connectionString)) //'using' ensures connections are closed after use.
+            if (score.score > 0)
             {
-                SqlCommand comm = new SqlCommand(query, con);
-                comm.Parameters.AddWithValue("@UserID", user.UserID);
-                comm.Parameters.AddWithValue("@Score", score.score);
-                comm.Parameters.AddWithValue("@Difficulty", score.difficulty);
-                comm.Parameters.AddWithValue("@Time", score.timeLapsed);
-                try
+                using (SqlConnection con = new SqlConnection(connectionString)) //'using' ensures connections are closed after use.
                 {
-                    comm.Connection.Open();
-                    comm.ExecuteNonQuery();
-                    results = true;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
+                    SqlCommand comm = new SqlCommand(query, con);
+                    comm.Parameters.AddWithValue("@UserID", user.UserID);
+                    comm.Parameters.AddWithValue("@Score", score.score);
+                    comm.Parameters.AddWithValue("@Difficulty", score.difficulty);
+                    comm.Parameters.AddWithValue("@Time", score.timeLapsed);
+                    try
+                    {
+                        comm.Connection.Open();
+                        comm.ExecuteNonQuery();
+                        results = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 }
             }
             return results;
@@ -71,22 +73,23 @@ namespace CST247CLC.Services.Data
 
         public List<PlayerStat> GetUserScores(User user)
         {
-            string query = $"SELECT * FROM dbo.Scores WHERE userID = @UserID";
+            string query = $"select * from [dbo].[Scores] where [userID] = @UserID";
             List<PlayerStat> scores = new List<PlayerStat>();
-            PlayerStat score = new PlayerStat();
             using (SqlConnection con = new SqlConnection(connectionString)) //'using' ensures connections are closed after use.
             {
                 SqlCommand comm = new SqlCommand(query, con);
                 try
                 {
                     comm.Connection.Open();
-                    comm.Parameters.Add("@UserID", System.Data.SqlDbType.VarChar, 50).Value = user.UserID;
+                    comm.Parameters.Add("@UserID", System.Data.SqlDbType.UniqueIdentifier);
+                    comm.Parameters["@UserID"].Value = user.UserID;
                     SqlDataReader reader = comm.ExecuteReader();
                     while (reader.Read())
                     {
-                        score.playerName = reader["PlayerName"].ToString();
-                        score.score = (int)reader["Score"];
-                        score.difficulty = reader["Difficulty"].ToString();
+                        PlayerStat score = new PlayerStat();
+                        score.playerName = user.FirstName + " " + user.LastName;
+                        score.score = (int)reader["score"];
+                        score.difficulty = reader["difficulty"].ToString();
                         scores.Add(score);
                     }
                 }

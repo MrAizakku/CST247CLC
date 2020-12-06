@@ -9,7 +9,7 @@ namespace CST247CLC.Services.Data
 {
     public class SecurityDAO
     {
-        private readonly string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TestDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        private readonly string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Minesweeper;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         public bool LoginValidationByUserPass(User user)
         {
             
@@ -48,6 +48,7 @@ namespace CST247CLC.Services.Data
                     SqlDataReader reader = comm.ExecuteReader();
                     while (reader.Read())
                     {
+                        save.UserID = reader.GetGuid(reader.GetOrdinal("UserID"));
                         save.Username = reader["Username"].ToString();
                         save.Password = reader["Password"].ToString();
                         save.FirstName = reader["FirstName"].ToString();
