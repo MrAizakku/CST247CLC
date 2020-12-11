@@ -13,6 +13,7 @@ namespace MinesweeperModels
         public int difficulty { get; set; }     //indicate amount of bombs
         public string gameAlert { get; set; }     //message to user
         public Timer timer { get; set; }
+        public DateTime timeStarted { get; set; }
 
         public Board(int size)
         {
@@ -22,6 +23,7 @@ namespace MinesweeperModels
             this.size = size;
             grid = new Cell[this.size, this.size];
             this.timer = new Timer();
+            timeStarted = DateTime.Now;
             initializeBoard();
         }
 

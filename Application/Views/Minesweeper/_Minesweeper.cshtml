@@ -22,7 +22,8 @@
         });
     });
 </script>
-@Model.gameAlert
+@Model.gameAlert  <br />
+Board From: @Model.timeStarted
 
 @using (Ajax.BeginForm("OnButtonClick", "Minesweeper", ajaxOptions))
 {

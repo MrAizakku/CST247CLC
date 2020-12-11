@@ -14,8 +14,9 @@ namespace CST247CLC.Controllers
     {
         static public Board myBoard;
         static public bool GameOver = false;
-        public static User user; 
+        public static User user;
         // GET: Minesweeper
+        [CustomAuthorization]
         public ActionResult Index()
         {
             user = Session["User"] as User;

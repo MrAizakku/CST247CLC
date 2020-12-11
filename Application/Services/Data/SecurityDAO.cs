@@ -15,19 +15,21 @@ namespace CST247CLC.Services.Data
             
             string query = $"SELECT rtrim(USERNAME) FROM dbo.Users WHERE USERNAME = @Username AND PASSWORD = @Password";
             bool results = false;       //default assumption of result
-
-            using (SqlConnection con = new SqlConnection(connectionString)) //'using' ensures connections are closed after use.
+            if (user != null)
             {
-                SqlCommand comm = new SqlCommand(query, con);
-                try
+                using (SqlConnection con = new SqlConnection(connectionString)) //'using' ensures connections are closed after use.
                 {
-                    comm.Connection.Open();
-                    comm.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 50).Value = user.Username;
-                    comm.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 50).Value = user.Password;
-                    SqlDataReader reader = comm.ExecuteReader();
-                    if (reader.HasRows) { results = true; }
+                    SqlCommand comm = new SqlCommand(query, con);
+                    try
+                    {
+                        comm.Connection.Open();
+                        comm.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 50).Value = user.Username;
+                        comm.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 50).Value = user.Password;
+                        SqlDataReader reader = comm.ExecuteReader();
+                        if (reader.HasRows) { results = true; }
+                    }
+                    catch (Exception ex) { Console.WriteLine(ex.Message); }
                 }
-                catch (Exception ex) { Console.WriteLine(ex.Message); }
             }
             return results;
         }
