@@ -21,21 +21,21 @@ namespace CST247CLC.Controllers
         public ActionResult Index()
         {
             user = Session["User"] as User;          //grab user from session.
-            myBoard = user.savedBoard;      //force load the saved game, if it exists.
+            myBoard = user.savedBoard;              //force load the saved game, if it exists.
             if (myBoard==null || GameOver==true)    //if it doesn't exist or if game is over.
             {
-                GameOver = false;
+                GameOver = false;       //new game so make sure set to false
                 myBoard = new Board(10);
                 myBoard.difficulty = 15;
                 myBoard.setupLiveNeighbors();
                 myBoard.calculateLiveNeighbors();
                 myBoard.gameAlert = "New Game!";
-                user.savedBoard = myBoard; //
+                user.savedBoard = myBoard;          //make sure to set the new board to the user item so above check doesn't become an issue. 
             }
             return View("Minesweeper", myBoard);
         }
 
-        public ActionResult OnButtonRightClick(string mine)
+        public ActionResult OnButtonRightClick(string mine) //take mine from view
         {
             if (!GameOver)
             {
@@ -50,7 +50,7 @@ namespace CST247CLC.Controllers
             return PartialView("_Minesweeper", myBoard);
         }
 
-        public ActionResult OnButtonClick(string mine)
+        public ActionResult OnButtonClick(string mine) //take mine from view
         {
             if (!GameOver)
             {
@@ -97,7 +97,7 @@ namespace CST247CLC.Controllers
         {
             //We are doing this here rather than on the index so such a check is not done everytime the page reloads, only once we need to clear the gamesave.
             GameDAOService gameDAO = new GameDAOService(); 
-            gameDAO.ClearSave(user);//save that null board to database
+            gameDAO.ClearSave(user);//save that null board to database, don't need to inform session as GameOver=true by here. WIll auto make new board.
         }
 
         private void SaveScore(string result, User user) //playerstat model expects "win" or anything else.
@@ -132,7 +132,7 @@ namespace CST247CLC.Controllers
                 gameDAO.SaveGame(user, myBoard);
                 myBoard.gameAlert = "Game Saved!" + DateTime.Now;
                 //then update the session
-                Session["User"] = user;
+                Session["User"] = user; //save to DB and inform the session
             }
             return PartialView("_Minesweeper", myBoard);
         }
