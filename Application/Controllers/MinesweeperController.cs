@@ -129,8 +129,8 @@ namespace CST247CLC.Controllers
             {
                 //update the database
                 GameDAOService gameDAO = new GameDAOService();
-                gameDAO.SaveGame(user, myBoard);
                 myBoard.gameAlert = "Game Saved!" + DateTime.Now;
+                gameDAO.SaveGame(user, myBoard);
                 //then update the session
                 Session["User"] = user; //save to DB and inform the session
             }
