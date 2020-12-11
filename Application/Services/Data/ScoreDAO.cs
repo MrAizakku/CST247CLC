@@ -55,7 +55,7 @@ namespace CST247CLC.Services.Data
                     while (reader.Read())
                     {
                         PlayerStat score = new PlayerStat();
-                        score.playerName = reader["FirstName"].ToString() + reader["LastName"].ToString();
+                        score.playerName = reader["FirstName"].ToString() + " " + reader["LastName"].ToString();
                         score.score = (int)reader["score"];
                         score.difficulty = reader["difficulty"].ToString();
                         scores.Add(score);
@@ -65,7 +65,8 @@ namespace CST247CLC.Services.Data
                 {
                     Console.WriteLine(ex.Message);
                 }
-                return scores.Where(m => m.score > 0).ToList();
+                scores.Sort();
+                return scores.Where(m => m.score > 0).Take(5).ToList();
             }
         }
 
@@ -95,7 +96,8 @@ namespace CST247CLC.Services.Data
                 {
                     Console.WriteLine(ex.Message);
                 }
-                return scores;
+                scores.Sort();
+                return scores.Where(m => m.score > 0).Take(5).ToList();
             }
         }
 

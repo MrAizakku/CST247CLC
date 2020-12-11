@@ -22,7 +22,7 @@
         clear: both;
     }
 </style>
-<h2>User Landing Page</h2>
+<h2>@Model.Item1.FirstName @Model.Item1.LastName's Landing Page</h2>
 @using (Html.BeginForm("Index", "Minesweeper", FormMethod.Post))
 {
     <div class="form-group">
@@ -35,11 +35,11 @@
 <div class="row">
     <div class="row">
         <div class="sColumn" style="background-color:#aaa;">
-            <p>Global Scores:</p>
+            <p>Top 5 Global Scores:</p>
             @Html.Partial("~/Views/Profile/_GlobalScores.cshtml", Model.Item2)
         </div>
         <div class="sColumn" style="background-color:#bbb;">
-            <p>Personal Scores:</p>
+            <p>Top 5 Personal Scores:</p>
             @Html.Partial("~/Views/Profile/_PersonalScores.cshtml", Model.Item1.stats)
         </div>
     </div>
