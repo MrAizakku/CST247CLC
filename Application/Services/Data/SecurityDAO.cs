@@ -1,4 +1,5 @@
 ﻿using CST247CLC.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -59,6 +60,7 @@ namespace CST247CLC.Services.Data
                         save.Age = (int)reader["Age"];
                         save.State = reader["State"].ToString();
                         save.Email = reader["Email"].ToString();
+                        save.savedBoard = JsonConvert.DeserializeObject<MinesweeperModels.Board>(reader["GameString"].ToString());
                     }
                 }
                 catch (Exception ex)

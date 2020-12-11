@@ -12,9 +12,11 @@ namespace CST247CLC.Controllers
     public class ProfileController : Controller
     {
         // GET: Profile
-        public ActionResult Index(User user)
+        [CustomAuthorization]
+        public ActionResult Index()
         {
             ScoreDAOService s = new ScoreDAOService();
+            User user = (User) Session["User"];
             Tuple<User, List<PlayerStat>> tuple = new Tuple<User, List<PlayerStat>>(user, s.getGlobalScores());
             return View("Profile", tuple);
         }

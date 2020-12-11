@@ -41,6 +41,7 @@ namespace CST247CLC.Models
         [StringLength(15, MinimumLength = 8)]
         public string Password { get; set; }
         public List<PlayerStat> stats { get; set; }
+        public Board savedBoard = null;
 
 
         public List<PlayerStat> getStats()

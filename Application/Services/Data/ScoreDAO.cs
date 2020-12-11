@@ -42,9 +42,8 @@ namespace CST247CLC.Services.Data
 
         public List<PlayerStat> GetAllScores()
         {
-            string query = $"SELECT * FROM dbo.Scores";
+            string query = $"SELECT [U].[FirstName], [U].[LastName], [S].[difficulty], [S].[score] FROM [dbo].[Users] AS U JOIN [dbo].[Scores] AS S ON [U].[UserID] = [S].[userID]";
             List<PlayerStat> scores = new List<PlayerStat>();
-            PlayerStat score = new PlayerStat();
             using (SqlConnection con = new SqlConnection(connectionString)) //'using' ensures connections are closed after use.
             {
                 SqlCommand comm = new SqlCommand(query, con);
@@ -55,11 +54,10 @@ namespace CST247CLC.Services.Data
                     SqlDataReader reader = comm.ExecuteReader();
                     while (reader.Read())
                     {
-                        
-                        score.playerName = reader["PlayerName"].ToString();
-                        score.score = (int)reader["Score"];
-                        score.difficulty = reader["Difficulty"].ToString();
-                        score.timeLapsed = (int)reader["TimeElapsed"];
+                        PlayerStat score = new PlayerStat();
+                        score.playerName = reader["FirstName"].ToString() + reader["LastName"].ToString();
+                        score.score = (int)reader["score"];
+                        score.difficulty = reader["difficulty"].ToString();
                         scores.Add(score);
                     }
                 }
@@ -67,7 +65,7 @@ namespace CST247CLC.Services.Data
                 {
                     Console.WriteLine(ex.Message);
                 }
-                return scores;
+                return scores.Where(m => m.score > 0).ToList();
             }
         }
 

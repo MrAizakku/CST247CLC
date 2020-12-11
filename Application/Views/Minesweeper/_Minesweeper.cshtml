@@ -22,7 +22,8 @@
         });
     });
 </script>
-@Model.gameAlert  <br />
+@Model.gameAlert
+<br />
 Board From: @Model.timeStarted
 
 @using (Ajax.BeginForm("OnButtonClick", "Minesweeper", ajaxOptions))
@@ -63,4 +64,8 @@ Board From: @Model.timeStarted
         }
 
     }
+}
+@using (Ajax.BeginForm("onGameSave", "Minesweeper", ajaxOptions))
+{
+    <input type="submit" value="Save Game" />
 }

@@ -1,5 +1,6 @@
 ﻿using CST247CLC.Models;
 using CST247CLC.Services.Business;
+using CST247CLC.Services.Data;
 using MinesweeperModels;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,9 @@ namespace CST247CLC.Controllers
         [CustomAuthorization]
         public ActionResult Index()
         {
-            user = Session["User"] as User;
-            if (myBoard==null || GameOver==true)
+            user = Session["User"] as User;          //grab user from session.
+            myBoard = user.savedBoard;      //force load the saved game, if it exists.
+            if (myBoard==null || GameOver==true)    //if it doesn't exist or if game is over.
             {
                 GameOver = false;
                 myBoard = new Board(10);
@@ -28,6 +30,7 @@ namespace CST247CLC.Controllers
                 myBoard.setupLiveNeighbors();
                 myBoard.calculateLiveNeighbors();
                 myBoard.gameAlert = "New Game!";
+                user.savedBoard = myBoard; //
             }
             return View("Minesweeper", myBoard);
         }
@@ -69,22 +72,32 @@ namespace CST247CLC.Controllers
                 //check if cell is a bomb
                 if(myBoard.checkForBomb(currentCell)) //this will reveal and flood fill n everything AND let us know if a bomb was hit.
                 {
+                    GameOver = true;            //Game is over
+                    SaveScore("lose", user);
                     myBoard.gameAlert = "You hit a bomb! Game Over!";
                     myBoard.revealBoard();
-                    SaveScore("lose", user);
-                    GameOver = true;
+                    GameSaveClear();     //Erase users saveState as game is over.
                 }
                 else if (myBoard.checkForVictory())
                 {
+                    GameOver = true;            //Game is over
                     SaveScore("win", user);
                     myBoard.gameAlert = "You Win! Game Over!";
-                    GameOver = true;
+                    
+                    GameSaveClear();     //Erase users saveState as game is over.
                 }
                 else
                 {
                     //Keep Playing...
                 }
             }
+        }
+
+        private void GameSaveClear()
+        {
+            //We are doing this here rather than on the index so such a check is not done everytime the page reloads, only once we need to clear the gamesave.
+            GameDAOService gameDAO = new GameDAOService(); 
+            gameDAO.ClearSave(user);//save that null board to database
         }
 
         private void SaveScore(string result, User user) //playerstat model expects "win" or anything else.
@@ -108,6 +121,20 @@ namespace CST247CLC.Controllers
                     flaggedBombCountNum++;
             }
             return flaggedBombCountNum;
+        }
+
+        public ActionResult onGameSave()
+        {
+            if (GameOver==false)        //Dont want to save a game that is over.
+            {
+                //update the database
+                GameDAOService gameDAO = new GameDAOService();
+                gameDAO.SaveGame(user, myBoard);
+                myBoard.gameAlert = "Game Saved!" + DateTime.Now;
+                //then update the session
+                Session["User"] = user;
+            }
+            return PartialView("_Minesweeper", myBoard);
         }
 
     }

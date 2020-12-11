@@ -41,34 +41,9 @@ namespace CST247CLC.Controllers
 
         private List<PlayerStat> returnGlobalStats()
         {
-            List<MinesweeperModels.PlayerStat> global_temp_list = new List<MinesweeperModels.PlayerStat>();
-            PlayerStat newScore = new PlayerStat();
-            newScore.difficulty = "Normal";
-            newScore.playerName = "Bob Odenkirk";
-            newScore.gameResult = "win";
-            newScore.timeLapsed = 100;
-            newScore.flaggedBombCount = 2;
-            newScore.calculateScore();
-            global_temp_list.Add(newScore);
 
-            newScore = new PlayerStat();
-            newScore.difficulty = "Hard";
-            newScore.gameResult = "lose";
-            newScore.playerName = "David Cross";
-            newScore.timeLapsed = 70;
-            newScore.flaggedBombCount = 4;
-            newScore.calculateScore();
-            global_temp_list.Add(newScore);
-
-            newScore = new PlayerStat();
-            newScore.difficulty = "Easy";
-            newScore.gameResult = "win";
-            newScore.playerName = "Arthur Windsor";
-            newScore.timeLapsed = 44;
-            newScore.flaggedBombCount = 10;
-            newScore.calculateScore();
-            global_temp_list.Add(newScore);
-
+            ScoreDAOService scoreDAOService = new ScoreDAOService();
+            List<MinesweeperModels.PlayerStat> global_temp_list = scoreDAOService.getAllScores();
             return global_temp_list;
         }
     }
