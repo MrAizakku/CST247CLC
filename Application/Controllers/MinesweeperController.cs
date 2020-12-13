@@ -27,11 +27,11 @@ namespace CST247CLC.Controllers
                 GameOver = false;       //new game so make sure set to false
                 myBoard = new Board(10)
                 {
-                    difficulty = 15
+                    Difficulty = 15
                 };
-                myBoard.setupLiveNeighbors();
-                myBoard.calculateLiveNeighbors();
-                myBoard.gameAlert = "New Game!";
+                myBoard.SetupLiveNeighbors();
+                myBoard.CalculateLiveNeighbors();
+                myBoard.GameAlert = "New Game!";
                 user.savedBoard = myBoard;          //make sure to set the new board to the user item so above check doesn't become an issue. 
             }
             return View("Minesweeper", myBoard);
@@ -44,10 +44,10 @@ namespace CST247CLC.Controllers
                 string[] strArr = mine.Split('|');
                 int r = int.Parse(strArr[0]);
                 int c = int.Parse(strArr[1]);
-                Cell currentCell = myBoard.grid[r, c];
+                Cell currentCell = myBoard.Grid[r, c];
 
-                if (!currentCell.isVisited)
-                    currentCell.isFlagged = !currentCell.isFlagged;
+                if (!currentCell.IsVisited)
+                    currentCell.IsFlagged = !currentCell.IsFlagged;
             }
             return PartialView("_Minesweeper", myBoard);
         }
@@ -59,9 +59,9 @@ namespace CST247CLC.Controllers
                 string[] strArr = mine.Split('|');
                 int r = int.Parse(strArr[0]);
                 int c = int.Parse(strArr[1]);
-                Cell currentCell = myBoard.grid[r, c];
+                Cell currentCell = myBoard.Grid[r, c];
 
-                if (!currentCell.isFlagged)
+                if (!currentCell.IsFlagged)
                     GameLogic(currentCell);
             }
             return PartialView("_Minesweeper", myBoard);
@@ -69,22 +69,22 @@ namespace CST247CLC.Controllers
 
         private void GameLogic(Cell currentCell)    //send logic to gameBoard for process and update the views accordingly.
         {
-            if (!currentCell.isVisited)
+            if (!currentCell.IsVisited)
             {
                 //check if cell is a bomb
-                if(myBoard.checkForBomb(currentCell)) //this will reveal and flood fill n everything AND let us know if a bomb was hit.
+                if(myBoard.CheckForBomb(currentCell)) //this will reveal and flood fill n everything AND let us know if a bomb was hit.
                 {
                     GameOver = true;            //Game is over
                     SaveScore("lose", user);
-                    myBoard.gameAlert = "You hit a bomb! Game Over!";
-                    myBoard.revealBoard();
+                    myBoard.GameAlert = "You hit a bomb! Game Over!";
+                    myBoard.RevealBoard();
                     GameSaveClear();     //Erase users saveState as game is over.
                 }
-                else if (myBoard.checkForVictory())
+                else if (myBoard.CheckForVictory())
                 {
                     GameOver = true;            //Game is over
                     SaveScore("win", user);
-                    myBoard.gameAlert = "You Win! Game Over!";
+                    myBoard.GameAlert = "You Win! Game Over!";
                     
                     GameSaveClear();     //Erase users saveState as game is over.
                 }
@@ -107,21 +107,21 @@ namespace CST247CLC.Controllers
             ScoreDAOService scoreService = new ScoreDAOService();
             PlayerStat newScore = new PlayerStat
             {
-                difficulty = "Normal",
-                gameResult = result,
-                timeLapsed = 100,
-                flaggedBombCount = GetFlaggedBombCount()
+                Difficulty = "Normal",
+                GameResult = result,
+                TimeLapsed = 100,
+                FlaggedBombCount = GetFlaggedBombCount()
             };
-            newScore.calculateScore();
+            newScore.CalculateScore();
             scoreService.SaveScore(user, newScore);
         }
 
         private int GetFlaggedBombCount()
         {
             int flaggedBombCountNum = 0;
-            foreach (var item in myBoard.bombList)
+            foreach (var item in myBoard.BombList)
             {
-                if (item.isFlagged)
+                if (item.IsFlagged)
                     flaggedBombCountNum++;
             }
             return flaggedBombCountNum;
@@ -133,7 +133,7 @@ namespace CST247CLC.Controllers
             {
                 //update the database
                 GameDAOService gameDAO = new GameDAOService();
-                myBoard.gameAlert = "Game Saved!" + DateTime.Now;
+                myBoard.GameAlert = "Game Saved!" + DateTime.Now;
                 gameDAO.SaveGame(user, myBoard);
                 //then update the session
                 Session["User"] = user; //save to DB and inform the session

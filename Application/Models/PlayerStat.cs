@@ -10,29 +10,29 @@ namespace MinesweeperModels
     public class PlayerStat : IComparable
     {
         [Display(Name = "Name")]
-        public string playerName { get; set; }
+        public string PlayerName { get; set; }
         [Display(Name = "Difficulty")]
-        public string difficulty { get; set; }      //to keep track of difficulty played
-        public string gameResult { get; set; }      //not really used at this time.
-        public int flaggedBombCount { get; set; }   //used to assess points earned
+        public string Difficulty { get; set; }      //to keep track of difficulty played
+        public string GameResult { get; set; }      //not really used at this time.
+        public int FlaggedBombCount { get; set; }   //used to assess points earned
         [Display(Name = "Time")]
-        public int timeLapsed { get; set; }
+        public int TimeLapsed { get; set; }
         [Display(Name = "Score")]
-        public int score { get; set; }              //calulated in method below...
+        public int Score { get; set; }              //calulated in method below...
 
         public PlayerStat()     //prebuild the stat with empty fields.
         {
-            difficulty = "-----";
-            timeLapsed = 0;
-            flaggedBombCount = 0;
+            Difficulty = "-----";
+            TimeLapsed = 0;
+            FlaggedBombCount = 0;
         }
 
-        public void calculateScore()
+        public void CalculateScore()
         {
             //each bomb is worth 500 points minus the time taken to identify all bombs if win, else 250 minus the time. lowest 100
-            int scoreModifier = (gameResult == "win" ? (500 - timeLapsed) : (250 - timeLapsed));
+            int scoreModifier = (GameResult == "win" ? (500 - TimeLapsed) : (250 - TimeLapsed));
             if (scoreModifier < 100) scoreModifier = 100;
-            score =  flaggedBombCount * scoreModifier;
+            Score =  FlaggedBombCount * scoreModifier;
 
         }
 
@@ -40,9 +40,9 @@ namespace MinesweeperModels
         {
             if (obj == null) return 1;
             PlayerStat p2 = (PlayerStat)obj;
-            if (this.score < p2.score)
+            if (this.Score < p2.Score)
                 return 1;
-            if (this.score > p2.score)
+            if (this.Score > p2.Score)
                 return -1;
             else
                 return 0;

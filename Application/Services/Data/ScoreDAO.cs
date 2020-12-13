@@ -15,15 +15,15 @@ namespace CST247CLC.Services.Data
         {
             string query = $"INSERT INTO dbo.Scores (userID, score, difficulty, timeElapsed) VALUES (@UserID, @Score, @Difficulty, @Time)";
             bool results = false;       //default assumption of result
-            if (score.score > 0)
+            if (score.Score > 0)
             {
                 using (SqlConnection con = new SqlConnection(connectionString)) //'using' ensures connections are closed after use.
                 {
                     SqlCommand comm = new SqlCommand(query, con);
                     comm.Parameters.AddWithValue("@UserID", user.UserID);
-                    comm.Parameters.AddWithValue("@Score", score.score);
-                    comm.Parameters.AddWithValue("@Difficulty", score.difficulty);
-                    comm.Parameters.AddWithValue("@Time", score.timeLapsed);
+                    comm.Parameters.AddWithValue("@Score", score.Score);
+                    comm.Parameters.AddWithValue("@Difficulty", score.Difficulty);
+                    comm.Parameters.AddWithValue("@Time", score.TimeLapsed);
                     try
                     {
                         comm.Connection.Open();
@@ -56,9 +56,9 @@ namespace CST247CLC.Services.Data
                     {
                         PlayerStat score = new PlayerStat
                         {
-                            playerName = reader["FirstName"].ToString() + " " + reader["LastName"].ToString(),
-                            score = (int)reader["score"],
-                            difficulty = reader["difficulty"].ToString()
+                            PlayerName = reader["FirstName"].ToString() + " " + reader["LastName"].ToString(),
+                            Score = (int)reader["score"],
+                            Difficulty = reader["difficulty"].ToString()
                         };
                         scores.Add(score);
                     }
@@ -68,7 +68,7 @@ namespace CST247CLC.Services.Data
                     Console.WriteLine(ex.Message);
                 }
                 scores.Sort();
-                return scores.Where(m => m.score > 0).ToList();
+                return scores.Where(m => m.Score > 0).ToList();
             }
         }
 
@@ -89,9 +89,9 @@ namespace CST247CLC.Services.Data
                     {
                         PlayerStat score = new PlayerStat
                         {
-                            playerName = user.FirstName + " " + user.LastName,
-                            score = (int)reader["score"],
-                            difficulty = reader["difficulty"].ToString()
+                            PlayerName = user.FirstName + " " + user.LastName,
+                            Score = (int)reader["score"],
+                            Difficulty = reader["difficulty"].ToString()
                         };
                         scores.Add(score);
                     }
@@ -101,7 +101,7 @@ namespace CST247CLC.Services.Data
                     Console.WriteLine(ex.Message);
                 }
                 scores.Sort();
-                return scores.Where(m => m.score > 0).ToList();
+                return scores.Where(m => m.Score > 0).ToList();
             }
         }
 
@@ -121,9 +121,9 @@ namespace CST247CLC.Services.Data
                     {
                         PlayerStat score = new PlayerStat
                         {
-                            playerName = reader["FirstName"].ToString() + " " + reader["LastName"].ToString(),
-                            score = (int)reader["score"],
-                            difficulty = reader["difficulty"].ToString()
+                            PlayerName = reader["FirstName"].ToString() + " " + reader["LastName"].ToString(),
+                            Score = (int)reader["score"],
+                            Difficulty = reader["difficulty"].ToString()
                         };
                         scores.Add(score);
                     }
@@ -133,7 +133,7 @@ namespace CST247CLC.Services.Data
                     Console.WriteLine(ex.Message);
                 }
                 scores.Sort();
-                return scores.Where(m => m.score > 0).ToList();
+                return scores.Where(m => m.Score > 0).ToList();
             }
         }
 
