@@ -1,6 +1,6 @@
 ﻿using CST247CLC.Models;
+using RESTService;
 using CST247CLC.Services.Data;
-using HelloWorldService;
 using MinesweeperModels;
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace RESTService {
             ScoreDTO scoreDTO = new ScoreDTO();
             List<PlayerStat> returnList = scoreDAO.GetUserScoresByName(user);
             scoreDTO.ErrorCode = returnList.Count > 0 ? 0 : -1;
-            scoreDTO.ErrorMsg = returnList.Count > 0 ? "OK" : $"User '{user}' Does Not Exist";
+            scoreDTO.ErrorMsg = returnList.Count > 0 ? "OK" : $"User '{user}' Does Not Exist Or Does Not Have Scores";
             scoreDTO.Scores = returnList.Count > 0 ? returnList : null;
             return scoreDTO;
         }

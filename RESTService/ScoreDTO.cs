@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 
-namespace HelloWorldService
+namespace RESTService
 {
     [DataContract]
     public class ScoreDTO
