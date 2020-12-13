@@ -48,6 +48,7 @@ namespace CST247CLC.Controllers
 
                 if (!currentCell.IsVisited)
                     currentCell.IsFlagged = !currentCell.IsFlagged;
+                myBoard.Clicks++;
             }
             return PartialView("_Minesweeper", myBoard);
         }
@@ -63,6 +64,7 @@ namespace CST247CLC.Controllers
 
                 if (!currentCell.IsFlagged)
                     GameLogic(currentCell);
+                myBoard.Clicks++;
             }
             return PartialView("_Minesweeper", myBoard);
         }
@@ -108,12 +110,14 @@ namespace CST247CLC.Controllers
             PlayerStat newScore = new PlayerStat
             {
                 Difficulty = "Normal",
+                PlayerName = user.FirstName + " " + user.LastName,
                 GameResult = result,
-                TimeLapsed = 100,
+                Clicks = myBoard.Clicks,
                 FlaggedBombCount = GetFlaggedBombCount()
             };
             newScore.CalculateScore();
             scoreService.SaveScore(user, newScore);
+            user.Stats.Add(newScore);
         }
 
         private int GetFlaggedBombCount()

@@ -14,7 +14,7 @@ namespace MinesweeperModels
         public string GameAlert { get; set; }     //message to user
         public Timer Timer { get; set; }
         public DateTime TimeStarted { get; set; }
-        public int Clicks { get; set; }
+        public int Clicks { get; set; } = 0;
 
         public Board(int size)
         {

@@ -3,32 +3,32 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(m => Model[0].playerName)
+            @Html.DisplayNameFor(m => Model[0].PlayerName)
         </th>
         <th>
-            @Html.DisplayNameFor(m => Model[0].difficulty)
+            @Html.DisplayNameFor(m => Model[0].Difficulty)
         </th>
         <th>
-            @Html.DisplayNameFor(m => Model[0].timeLapsed)
+            @Html.DisplayNameFor(m => Model[0].Clicks)
         </th>
         <th>
-            @Html.DisplayNameFor(m => Model[0].score)
+            @Html.DisplayNameFor(m => Model[0].Score)
         </th>
     </tr>
     @foreach (var item in Model)
     {
         <tr>
             <td>
-                @Html.DisplayFor(m => item.playerName)
+                @Html.DisplayFor(m => item.PlayerName)
             </td>
             <td>
-                @Html.DisplayFor(m => item.difficulty)
+                @Html.DisplayFor(m => item.Difficulty)
             </td>
             <td>
-                @Html.DisplayFor(m => item.timeLapsed)
+                @Html.DisplayFor(m => item.Clicks)
             </td>
             <td>
-                @Html.DisplayFor(m => item.score)
+                @Html.DisplayFor(m => item.Score)
             </td>
         </tr>
     }

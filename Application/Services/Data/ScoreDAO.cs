@@ -13,7 +13,7 @@ namespace CST247CLC.Services.Data
         private readonly string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Minesweeper;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         public bool SaveScore(User user, PlayerStat score)
         {
-            string query = $"INSERT INTO dbo.Scores (userID, score, difficulty, timeElapsed) VALUES (@UserID, @Score, @Difficulty, @Time)";
+            string query = $"INSERT INTO dbo.Scores (userID, score, difficulty, clicks) VALUES (@UserID, @Score, @Difficulty, @Clicks)";
             bool results = false;       //default assumption of result
             if (score.Score > 0)
             {
@@ -23,7 +23,7 @@ namespace CST247CLC.Services.Data
                     comm.Parameters.AddWithValue("@UserID", user.UserID);
                     comm.Parameters.AddWithValue("@Score", score.Score);
                     comm.Parameters.AddWithValue("@Difficulty", score.Difficulty);
-                    comm.Parameters.AddWithValue("@Time", score.TimeLapsed);
+                    comm.Parameters.AddWithValue("@Clicks", score.Clicks);
                     try
                     {
                         comm.Connection.Open();
@@ -42,7 +42,7 @@ namespace CST247CLC.Services.Data
 
         public List<PlayerStat> GetAllScores()
         {
-            string query = $"SELECT [U].[FirstName], [U].[LastName], [S].[difficulty], [S].[score] FROM [dbo].[Users] AS U JOIN [dbo].[Scores] AS S ON [U].[UserID] = [S].[userID]";
+            string query = $"SELECT [U].[FirstName], [U].[LastName], [S].[difficulty], [S].[score], [S].[clicks] FROM [dbo].[Users] AS U JOIN [dbo].[Scores] AS S ON [U].[UserID] = [S].[userID]";
             List<PlayerStat> scores = new List<PlayerStat>();
             using (SqlConnection con = new SqlConnection(connectionString)) //'using' ensures connections are closed after use.
             {
@@ -58,6 +58,7 @@ namespace CST247CLC.Services.Data
                         {
                             PlayerName = reader["FirstName"].ToString() + " " + reader["LastName"].ToString(),
                             Score = (int)reader["score"],
+                            Clicks = (int)reader["clicks"],
                             Difficulty = reader["difficulty"].ToString()
                         };
                         scores.Add(score);
@@ -91,6 +92,7 @@ namespace CST247CLC.Services.Data
                         {
                             PlayerName = user.FirstName + " " + user.LastName,
                             Score = (int)reader["score"],
+                            Clicks = (int)reader["clicks"],
                             Difficulty = reader["difficulty"].ToString()
                         };
                         scores.Add(score);
@@ -107,7 +109,7 @@ namespace CST247CLC.Services.Data
 
         public List<PlayerStat> GetUserScoresByName(string name)
         {
-            string query = $"SELECT [U].[FirstName], [U].[LastName], [S].[difficulty], [S].[score] FROM [dbo].[Users] AS U JOIN [dbo].[Scores] AS S ON [U].[UserID] = [S].[userID] WHERE [FirstName] = @Name OR [LastName] = @Name";
+            string query = $"SELECT [U].[FirstName], [U].[LastName], [S].[difficulty], [S].[score], [S].[clicks] FROM [dbo].[Users] AS U JOIN [dbo].[Scores] AS S ON [U].[UserID] = [S].[userID] WHERE [FirstName] = @Name OR [LastName] = @Name";
             List<PlayerStat> scores = new List<PlayerStat>();
             using (SqlConnection con = new SqlConnection(connectionString)) //'using' ensures connections are closed after use.
             {
@@ -123,6 +125,7 @@ namespace CST247CLC.Services.Data
                         {
                             PlayerName = reader["FirstName"].ToString() + " " + reader["LastName"].ToString(),
                             Score = (int)reader["score"],
+                            Clicks = (int)reader["clicks"],
                             Difficulty = reader["difficulty"].ToString()
                         };
                         scores.Add(score);
