@@ -15,7 +15,7 @@ namespace CST247CLC.Services.Business
             ScoreDAO service = new ScoreDAO();
             return service.SaveScore(user, score);
         }
-        public List<PlayerStat> getAllScores()
+        public List<PlayerStat> GetAllScores()
         {
             ScoreDAO service = new ScoreDAO();
             return service.GetAllScores();
@@ -25,16 +25,10 @@ namespace CST247CLC.Services.Business
             ScoreDAO service = new ScoreDAO();
             return service.GetUserScores(user);
         }
-        public List<PlayerStat> getGlobalScores()
+        public List<PlayerStat> GetGlobalScores()
         {
             ScoreDAO service = new ScoreDAO();
             return service.GetAllScores();
         }
-        public List<PlayerStat> fetchStats(Guid userID)
-        {
-            ScoreDAO service = new ScoreDAO();
-            return service.fetchStats(userID);
-        }
-
     }
 }

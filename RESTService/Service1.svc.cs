@@ -1,6 +1,6 @@
-﻿using Activity1Part3.Models;
-using CST247CLC.Models;
+﻿using CST247CLC.Models;
 using CST247CLC.Services.Data;
+using HelloWorldService;
 using MinesweeperModels;
 using System;
 using System.Collections.Generic;
@@ -15,33 +15,25 @@ namespace RESTService {
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class Service1 : IService1 {
 
-
-
-        public List<PlayerStat> getAllScores()
+        private readonly ScoreDAO scoreDAO = new ScoreDAO();
+        public ScoreDTO GetAllScores()
         {
-            List<PlayerStat> allScores = new List<PlayerStat>();
-            ScoreDAO scoreDAO = new ScoreDAO();
-            allScores = scoreDAO.GetAllScores();
-            return allScores;
+            ScoreDTO scoreDTO = new ScoreDTO();
+            List<PlayerStat> returnList = scoreDAO.GetAllScores();
+            scoreDTO.ErrorCode = 0;
+            scoreDTO.ErrorMsg = "OK";
+            scoreDTO.Scores = returnList.Count > 0 ? returnList : null;
+            return scoreDTO;
         }
 
-        public List<PlayerStat> getUserScores(User user)
+        public ScoreDTO GetUserScoresByName(string user)
         {
-            List<PlayerStat> userScores = new List<PlayerStat>();
-            ScoreDAO scoreDAO = new ScoreDAO();
-            userScores = scoreDAO.GetUserScores(user);
-            return userScores;
+            ScoreDTO scoreDTO = new ScoreDTO();
+            List<PlayerStat> returnList = scoreDAO.GetUserScoresByName(user);
+            scoreDTO.ErrorCode = returnList.Count > 0 ? 0 : -1;
+            scoreDTO.ErrorMsg = returnList.Count > 0 ? "OK" : $"User '{user}' Does Not Exist";
+            scoreDTO.Scores = returnList.Count > 0 ? returnList : null;
+            return scoreDTO;
         }
-
-
-
-
-
-
-
-
-        
-
-
     }
 }

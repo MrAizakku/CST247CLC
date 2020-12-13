@@ -25,8 +25,10 @@ namespace CST247CLC.Controllers
             if (myBoard==null || GameOver==true)    //if it doesn't exist or if game is over.
             {
                 GameOver = false;       //new game so make sure set to false
-                myBoard = new Board(10);
-                myBoard.difficulty = 15;
+                myBoard = new Board(10)
+                {
+                    difficulty = 15
+                };
                 myBoard.setupLiveNeighbors();
                 myBoard.calculateLiveNeighbors();
                 myBoard.gameAlert = "New Game!";
@@ -60,12 +62,12 @@ namespace CST247CLC.Controllers
                 Cell currentCell = myBoard.grid[r, c];
 
                 if (!currentCell.isFlagged)
-                    gameLogic(currentCell);
+                    GameLogic(currentCell);
             }
             return PartialView("_Minesweeper", myBoard);
         }
 
-        private void gameLogic(Cell currentCell)    //send logic to gameBoard for process and update the views accordingly.
+        private void GameLogic(Cell currentCell)    //send logic to gameBoard for process and update the views accordingly.
         {
             if (!currentCell.isVisited)
             {
@@ -103,16 +105,18 @@ namespace CST247CLC.Controllers
         private void SaveScore(string result, User user) //playerstat model expects "win" or anything else.
         {
             ScoreDAOService scoreService = new ScoreDAOService();
-            PlayerStat newScore = new PlayerStat();
-            newScore.difficulty = "Normal";
-            newScore.gameResult = result;
-            newScore.timeLapsed = 100;
-            newScore.flaggedBombCount = getFlaggedBombCount();
+            PlayerStat newScore = new PlayerStat
+            {
+                difficulty = "Normal",
+                gameResult = result,
+                timeLapsed = 100,
+                flaggedBombCount = GetFlaggedBombCount()
+            };
             newScore.calculateScore();
             scoreService.SaveScore(user, newScore);
         }
 
-        private int getFlaggedBombCount()
+        private int GetFlaggedBombCount()
         {
             int flaggedBombCountNum = 0;
             foreach (var item in myBoard.bombList)
@@ -123,7 +127,7 @@ namespace CST247CLC.Controllers
             return flaggedBombCountNum;
         }
 
-        public ActionResult onGameSave()
+        public ActionResult OnGameSave()
         {
             if (GameOver==false)        //Dont want to save a game that is over.
             {

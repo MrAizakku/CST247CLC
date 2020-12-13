@@ -1,5 +1,5 @@
-﻿using Activity1Part3.Models;
-using CST247CLC.Models;
+﻿using CST247CLC.Models;
+using HelloWorldService;
 using MinesweeperModels;
 using System;
 using System.Collections.Generic;
@@ -16,20 +16,10 @@ namespace RESTService {
     {
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "getAllScores")]
-        List<PlayerStat> getAllScores();
+        ScoreDTO GetAllScores();
 
         [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "getUserScores/{user}")]
-        List<PlayerStat> getUserScores(User user);
-
-
-
-
-
-
-
-
-
-    
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "GetUserScoresByName/{user}")]
+        ScoreDTO GetUserScoresByName(string user);
     }
 }

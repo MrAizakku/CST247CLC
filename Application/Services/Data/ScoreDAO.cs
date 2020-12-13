@@ -54,10 +54,12 @@ namespace CST247CLC.Services.Data
                     SqlDataReader reader = comm.ExecuteReader();
                     while (reader.Read())
                     {
-                        PlayerStat score = new PlayerStat();
-                        score.playerName = reader["FirstName"].ToString() + " " + reader["LastName"].ToString();
-                        score.score = (int)reader["score"];
-                        score.difficulty = reader["difficulty"].ToString();
+                        PlayerStat score = new PlayerStat
+                        {
+                            playerName = reader["FirstName"].ToString() + " " + reader["LastName"].ToString(),
+                            score = (int)reader["score"],
+                            difficulty = reader["difficulty"].ToString()
+                        };
                         scores.Add(score);
                     }
                 }
@@ -66,7 +68,7 @@ namespace CST247CLC.Services.Data
                     Console.WriteLine(ex.Message);
                 }
                 scores.Sort();
-                return scores.Where(m => m.score > 0).Take(5).ToList();
+                return scores.Where(m => m.score > 0).ToList();
             }
         }
 
@@ -85,10 +87,12 @@ namespace CST247CLC.Services.Data
                     SqlDataReader reader = comm.ExecuteReader();
                     while (reader.Read())
                     {
-                        PlayerStat score = new PlayerStat();
-                        score.playerName = user.FirstName + " " + user.LastName;
-                        score.score = (int)reader["score"];
-                        score.difficulty = reader["difficulty"].ToString();
+                        PlayerStat score = new PlayerStat
+                        {
+                            playerName = user.FirstName + " " + user.LastName,
+                            score = (int)reader["score"],
+                            difficulty = reader["difficulty"].ToString()
+                        };
                         scores.Add(score);
                     }
                 }
@@ -97,28 +101,30 @@ namespace CST247CLC.Services.Data
                     Console.WriteLine(ex.Message);
                 }
                 scores.Sort();
-                return scores.Where(m => m.score > 0).Take(5).ToList();
+                return scores.Where(m => m.score > 0).ToList();
             }
         }
 
-        public List<PlayerStat> fetchStats(Guid userID)
+        public List<PlayerStat> GetUserScoresByName(string name)
         {
-            string query = $"SELECT * FROM dbo.Scores WHERE userID = @UserID";
+            string query = $"SELECT [U].[FirstName], [U].[LastName], [S].[difficulty], [S].[score] FROM [dbo].[Users] AS U JOIN [dbo].[Scores] AS S ON [U].[UserID] = [S].[userID] WHERE [FirstName] = @Name OR [LastName] = @Name";
             List<PlayerStat> scores = new List<PlayerStat>();
-            PlayerStat score = new PlayerStat();
             using (SqlConnection con = new SqlConnection(connectionString)) //'using' ensures connections are closed after use.
             {
                 SqlCommand comm = new SqlCommand(query, con);
                 try
                 {
                     comm.Connection.Open();
-                    comm.Parameters.Add("@UserID", System.Data.SqlDbType.VarChar, 50).Value = userID;
+                    comm.Parameters.Add("@Name", System.Data.SqlDbType.VarChar, 50).Value = name;
                     SqlDataReader reader = comm.ExecuteReader();
                     while (reader.Read())
                     {
-                        score.playerName = reader["PlayerName"].ToString();
-                        score.score = (int)reader["Score"];
-                        score.difficulty = reader["Difficulty"].ToString();
+                        PlayerStat score = new PlayerStat
+                        {
+                            playerName = reader["FirstName"].ToString() + " " + reader["LastName"].ToString(),
+                            score = (int)reader["score"],
+                            difficulty = reader["difficulty"].ToString()
+                        };
                         scores.Add(score);
                     }
                 }
@@ -126,10 +132,10 @@ namespace CST247CLC.Services.Data
                 {
                     Console.WriteLine(ex.Message);
                 }
-                return scores;
+                scores.Sort();
+                return scores.Where(m => m.score > 0).ToList();
             }
         }
 
-        
     }
 }

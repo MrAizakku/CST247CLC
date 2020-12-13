@@ -17,7 +17,7 @@ namespace CST247CLC.Controllers
         {
             ScoreDAOService s = new ScoreDAOService();
             User user = (User) Session["User"];
-            Tuple<User, List<PlayerStat>> tuple = new Tuple<User, List<PlayerStat>>(user, s.getGlobalScores());
+            Tuple<User, List<PlayerStat>> tuple = new Tuple<User, List<PlayerStat>>(user, s.GetGlobalScores().Take(5).ToList());
             return View("Profile", tuple);
         }
     }

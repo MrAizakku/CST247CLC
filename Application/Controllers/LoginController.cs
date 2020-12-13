@@ -27,9 +27,9 @@ namespace CST247CLC.Controllers
             {
                 user = sservice.LoadUser(user);
                 ScoreDAOService scoreDO = new ScoreDAOService();
-                user.stats = scoreDO.GetUserScores(user);
+                user.Stats = scoreDO.GetUserScores(user).Take(5).ToList();
                 Session["User"] = user;
-                Tuple<User, List<PlayerStat>> tuple = new Tuple<User, List<PlayerStat>>(user, returnGlobalStats()); //pass the user and the global stats
+                Tuple<User, List<PlayerStat>> tuple = new Tuple<User, List<PlayerStat>>(user, ReturnGlobalStats()); //pass the user and the global stats
                 return View("~/Views/Profile/Profile.cshtml", tuple);
                 //return View("LoginSuccess", model);
             }
@@ -39,11 +39,11 @@ namespace CST247CLC.Controllers
             }
         }
 
-        private List<PlayerStat> returnGlobalStats()
+        private List<PlayerStat> ReturnGlobalStats()
         {
 
             ScoreDAOService scoreDAOService = new ScoreDAOService();
-            List<MinesweeperModels.PlayerStat> global_temp_list = scoreDAOService.getAllScores();
+            List<MinesweeperModels.PlayerStat> global_temp_list = scoreDAOService.GetAllScores().Take(5).ToList();
             return global_temp_list;
         }
     }

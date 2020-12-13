@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CST247CLC", "Application\CST247CLC.csproj", "{DF2D423D-B6F2-4FF8-B52A-D7C70740BBCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTService", "..\RESTService\RESTService.csproj", "{672D9203-528A-4D92-8240-E8B170D287A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTService", "RESTService\RESTService.csproj", "{672D9203-528A-4D92-8240-E8B170D287A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
