@@ -1,5 +1,6 @@
 ﻿using CST247CLC.Models;
 using CST247CLC.Services.Business;
+using CST247CLC.Services.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,26 @@ namespace CST247CLC.Controllers
 {
     public class RegisterController : Controller
     {
+        private readonly ILogger logger;
+
+        public RegisterController(ILogger logger)
+        {
+            this.logger = logger;
+        }
+
         // GET: Register
         [HttpGet]
         public ActionResult Index()
         {
-            return View("Register");
+            try
+            {
+                return View("Register");
+            }
+            catch
+            {
+                logger.Error("Failure at RegisterController Index().");
+                return View("Error");
+            }
         }
 
         [HttpPost]

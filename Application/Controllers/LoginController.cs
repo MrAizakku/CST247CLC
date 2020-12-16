@@ -1,5 +1,6 @@
 ﻿using CST247CLC.Models;
 using CST247CLC.Services.Business;
+using CST247CLC.Services.Utility;
 using MinesweeperModels;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,12 @@ namespace CST247CLC.Controllers
 {
     public class LoginController : Controller
     {
+        private readonly ILogger logger;
+        public LoginController(ILogger logg)
+        {
+            this.logger = logg;
+        }
+
         // GET: Login
         [HttpGet]
         public ActionResult Index()
@@ -21,21 +28,29 @@ namespace CST247CLC.Controllers
         [HttpPost]
         public ActionResult Login(User user)
         {
-            SecurityDAOService sservice = new SecurityDAOService();
-            bool results = sservice.Authenticate(user);
-            if (results)
+            try
             {
-                user = sservice.LoadUser(user);
-                ScoreDAOService scoreDO = new ScoreDAOService();
-                user.Stats = scoreDO.GetUserScores(user).Take(5).ToList();
-                Session["User"] = user;
-                Tuple<User, List<PlayerStat>> tuple = new Tuple<User, List<PlayerStat>>(user, ReturnGlobalStats()); //pass the user and the global stats
-                return View("~/Views/Profile/Profile.cshtml", tuple);
-                //return View("LoginSuccess", model);
+                SecurityDAOService sservice = new SecurityDAOService();
+                bool results = sservice.Authenticate(user);
+                if (results)
+                {
+                    user = sservice.LoadUser(user);
+                    ScoreDAOService scoreDO = new ScoreDAOService();
+                    user.Stats = scoreDO.GetUserScores(user).Take(5).ToList();
+                    Session["User"] = user;
+                    Tuple<User, List<PlayerStat>> tuple = new Tuple<User, List<PlayerStat>>(user, ReturnGlobalStats()); //pass the user and the global stats
+                    return View("~/Views/Profile/Profile.cshtml", tuple);
+                    //return View("LoginSuccess", model);
+                }
+                else
+                {
+                    return View("LoginFailed");
+                }
             }
-            else
+            catch
             {
-                return View("LoginFailed");
+                logger.Error("Failure at LoginController Login().");
+                return View("Error");
             }
         }
 

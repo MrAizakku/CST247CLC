@@ -1,6 +1,7 @@
 ﻿using CST247CLC.Models;
 using CST247CLC.Services.Business;
 using CST247CLC.Services.Data;
+using CST247CLC.Services.Utility;
 using MinesweeperModels;
 using System;
 using System.Collections.Generic;
@@ -13,28 +14,43 @@ namespace CST247CLC.Controllers
 {
     public class MinesweeperController : Controller
     {
+        private readonly ILogger logger;
         static public Board myBoard;
         static public bool GameOver = false;
         public static User user;
+
+        public MinesweeperController(ILogger logger)
+        {
+            this.logger = logger;
+        }
+
         // GET: Minesweeper
         [CustomAuthorization]
         public ActionResult Index()
         {
-            user = Session["User"] as User;          //grab user from session.
-            myBoard = user.savedBoard;              //force load the saved game, if it exists.
-            if (myBoard==null || GameOver==true)    //if it doesn't exist or if game is over.
+            try
             {
-                GameOver = false;       //new game so make sure set to false
-                myBoard = new Board(10)
+                user = Session["User"] as User;          //grab user from session.
+                myBoard = user.savedBoard;              //force load the saved game, if it exists.
+                if (myBoard == null || GameOver == true)    //if it doesn't exist or if game is over.
                 {
-                    Difficulty = 15
-                };
-                myBoard.SetupLiveNeighbors();
-                myBoard.CalculateLiveNeighbors();
-                myBoard.GameAlert = "New Game!";
-                user.savedBoard = myBoard;          //make sure to set the new board to the user item so above check doesn't become an issue. 
+                    GameOver = false;       //new game so make sure set to false
+                    myBoard = new Board(10)
+                    {
+                        Difficulty = 15
+                    };
+                    myBoard.SetupLiveNeighbors();
+                    myBoard.CalculateLiveNeighbors();
+                    myBoard.GameAlert = "New Game!";
+                    user.savedBoard = myBoard;          //make sure to set the new board to the user item so above check doesn't become an issue. 
+                }
+                return View("Minesweeper", myBoard);
             }
-            return View("Minesweeper", myBoard);
+            catch
+            {
+                logger.Error("Failure at MinesweeperController Index().");
+                return View("Error");
+            }
         }
 
         public ActionResult OnButtonRightClick(string mine) //take mine from view
