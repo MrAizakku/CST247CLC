@@ -3,18 +3,23 @@
 <head>
     <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/jquery-3.0.0.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 </head>
-<body>
-    @RenderPage("_Header.cshtml")
-    <div class="container body-content">
-        @RenderBody()
-    </div>
-    @RenderPage("_Footer.cshtml")
-    <hr />
-</body>
+    <body class="modal-body">
+         @RenderPage("_Header.cshtml")
+        <main role="main" class="container">
+            <div class="container body-content">
+                @RenderBody()
+            </div>
+        </main>
+        <footer class="modal-footer">
+            <div class="container">
+                @RenderPage("_Footer.cshtml")
+            </div>
+        </footer>
+    </body>
 </html>
