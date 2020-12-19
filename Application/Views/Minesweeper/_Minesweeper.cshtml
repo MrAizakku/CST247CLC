@@ -39,7 +39,7 @@ Board From: @Model.TimeStarted
                 <br />
             }
 
-            <button class="minesweeper" type="submit" name="mine" value=@MineID>
+            <button class="minesweeper" type="submit" name="mine" value=@MineID style="width:40px;height:40px;">
                 @if (Model.Grid[row, column].IsVisited)
                 {
                     if (Model.Grid[row, column].IsLive)
