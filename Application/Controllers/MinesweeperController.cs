@@ -53,33 +53,60 @@ namespace CST247CLC.Controllers
             }
         }
 
+
+        //In the right click we are not refreshing the partial page - we are simply sending a new src location for the view to update without refreshing.
         public ActionResult OnButtonRightClick(string mine) //take mine from view
         {
+            //if game has not ended...
             if (!GameOver)
             {
+                //get the cell
                 string[] strArr = mine.Split('|');
                 int r = int.Parse(strArr[0]);
                 int c = int.Parse(strArr[1]);
                 Cell currentCell = myBoard.Grid[r, c];
 
+                //increment the clicks
+                myBoard.Clicks++;
+
+                //if not visisted, toggle flag status.
                 if (!currentCell.IsVisited)
                     currentCell.IsFlagged = !currentCell.IsFlagged;
-                myBoard.Clicks++;
+
+                //determine what to return to view.
+                if (!currentCell.IsVisited && !currentCell.IsFlagged)
+                {
+                    //return unflagged unvisisted image
+                    return Content("/Images/q.png", "text");
+                }
+                else if (!currentCell.IsVisited && currentCell.IsFlagged)
+                {
+                    //return flagged image
+                    return Content("/Images/f.png", "text");
+                }
             }
-            return PartialView("_Minesweeper", myBoard);
+            //return nothing if game is over. The view will know to disregard.
+            return null;
         }
 
+        //In the left click we are keeping the partial page refresh to show that AJAX is working correctly by only updating and refreshing the partial page.
+        //This is left on purpose to show the application meets the requirements of the CLC guidelines partial page refreshing.
         public ActionResult OnButtonClick(string mine) //take mine from view
         {
+            //if game is not over.
             if (!GameOver)
             {
+                //get that cell
                 string[] strArr = mine.Split('|');
                 int r = int.Parse(strArr[0]);
                 int c = int.Parse(strArr[1]);
                 Cell currentCell = myBoard.Grid[r, c];
 
+                //if that cell is flagged, ignore
                 if (!currentCell.IsFlagged)
                     GameLogic(currentCell);
+
+                //increment the clicks because they still wasted time clicking a flagged cell.
                 myBoard.Clicks++;
             }
             return PartialView("_Minesweeper", myBoard);
