@@ -22,6 +22,7 @@ namespace CST247CLC.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            logger.Info("Success at LoginController Index().");
             return View("Login");
         }
 
@@ -39,11 +40,13 @@ namespace CST247CLC.Controllers
                     user.Stats = scoreDO.GetUserScores(user).Take(5).ToList();
                     Session["User"] = user;
                     Tuple<User, List<PlayerStat>> tuple = new Tuple<User, List<PlayerStat>>(user, ReturnGlobalStats()); //pass the user and the global stats
+                    logger.Info("Success at LoginController Login() with login success.");
                     return View("~/Views/Profile/Profile.cshtml", tuple);
                     //return View("LoginSuccess", model);
                 }
                 else
                 {
+                    logger.Info("Success at LoginController Login() with login failure.");
                     return View("LoginFailed");
                 }
             }
@@ -56,9 +59,17 @@ namespace CST247CLC.Controllers
 
         private List<PlayerStat> ReturnGlobalStats()
         {
-
-            ScoreDAOService scoreDAOService = new ScoreDAOService();
-            List<MinesweeperModels.PlayerStat> global_temp_list = scoreDAOService.GetAllScores().Take(5).ToList();
+            List<MinesweeperModels.PlayerStat> global_temp_list = new List<MinesweeperModels.PlayerStat>();
+            try
+            {
+                ScoreDAOService scoreDAOService = new ScoreDAOService();
+                global_temp_list = scoreDAOService.GetAllScores().Take(5).ToList();
+                logger.Info("Success at LoginController ReturnGlobalStats()");
+            }
+            catch
+            {
+                logger.Error("Failure at LoginController ReturnGlobalStats()");
+            }
             return global_temp_list;
         }
     }

@@ -24,6 +24,7 @@ namespace CST247CLC.Controllers
         {
             try
             {
+                logger.Info("RegisterController Index(), success.");
                 return View("Register");
             }
             catch
@@ -38,19 +39,23 @@ namespace CST247CLC.Controllers
         {
             if (ModelState.IsValid)
             {
+                logger.Info("RegisterController Register(), ModelState is valid.");
                 SecurityDAOService sservice = new SecurityDAOService();
                 bool results = sservice.Register(model);
                 if (results)
                 {
+                    logger.Info("RegisterController Register(), Registration success.");
                     return View("RegistrationSuccess", model);
                 }
                 else
                 {
+                    logger.Info("RegisterController Register(), Registration failed.");
                     return View("RegistrationFailed");
                 }
             }
             else
             {
+                logger.Info("RegisterController Register(), ModelState is not valid.");
                 return View(model);
             }
         }

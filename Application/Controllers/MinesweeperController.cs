@@ -65,26 +65,33 @@ namespace CST247CLC.Controllers
                 int r = int.Parse(strArr[0]);
                 int c = int.Parse(strArr[1]);
                 Cell currentCell = myBoard.Grid[r, c];
-
+                logger.Info("MinesweeperController OnButtonRightClick(), Cell successfully parsed.");
                 //increment the clicks
                 myBoard.Clicks++;
 
                 //if not visisted, toggle flag status.
                 if (!currentCell.IsVisited)
+                {
                     currentCell.IsFlagged = !currentCell.IsFlagged;
-
+                    logger.Info("MinesweeperController OnButtonRightClick(), Cell flag status toggled.");
+                }
                 //determine what to return to view.
                 if (!currentCell.IsVisited && !currentCell.IsFlagged)
                 {
+
+                    logger.Info("MinesweeperController OnButtonRightClick(), returning ? img.");
                     //return unflagged unvisisted image
                     return Content("/Images/q.png", "text");
                 }
                 else if (!currentCell.IsVisited && currentCell.IsFlagged)
                 {
+                    logger.Info("MinesweeperController OnButtonRightClick(), returning Flag img.");
                     //return flagged image
                     return Content("/Images/f.png", "text");
                 }
             }
+
+            logger.Info("MinesweeperController OnButtonRightClick(), returning nothing as game is over.");
             //return nothing if game is over. The view will know to disregard.
             return null;
         }
@@ -101,10 +108,14 @@ namespace CST247CLC.Controllers
                 int r = int.Parse(strArr[0]);
                 int c = int.Parse(strArr[1]);
                 Cell currentCell = myBoard.Grid[r, c];
+                logger.Info("MinesweeperController OnButtonClick(), Cell successfully parsed.");
 
                 //if that cell is flagged, ignore
                 if (!currentCell.IsFlagged)
+                {
+                    logger.Info("MinesweeperController OnButtonClick(), Cell not flagged, going to game logic.");
                     GameLogic(currentCell);
+                }
 
                 //increment the clicks because they still wasted time clicking a flagged cell.
                 myBoard.Clicks++;
@@ -119,6 +130,7 @@ namespace CST247CLC.Controllers
                 //check if cell is a bomb
                 if(myBoard.CheckForBomb(currentCell)) //this will reveal and flood fill n everything AND let us know if a bomb was hit.
                 {
+                    logger.Info("MinesweeperController GameLogic(), Cell is bomb. Game over.");
                     GameOver = true;            //Game is over
                     SaveScore("lose", user);
                     myBoard.GameAlert = "You hit a bomb! Game Over!";
@@ -127,6 +139,7 @@ namespace CST247CLC.Controllers
                 }
                 else if (myBoard.CheckForVictory())
                 {
+                    logger.Info("MinesweeperController GameLogic(), User has won. Game over.");
                     GameOver = true;            //Game is over
                     SaveScore("win", user);
                     myBoard.GameAlert = "You Win! Game Over!";
@@ -142,6 +155,7 @@ namespace CST247CLC.Controllers
 
         private void GameSaveClear()
         {
+            logger.Info("MinesweeperController GameSaveClear(), Prev game is over. Erasing user save file.");
             //We are doing this here rather than on the index so such a check is not done everytime the page reloads, only once we need to clear the gamesave.
             GameDAOService gameDAO = new GameDAOService(); 
             gameDAO.ClearSave(user);//save that null board to database, don't need to inform session as GameOver=true by here. WIll auto make new board.
@@ -149,18 +163,26 @@ namespace CST247CLC.Controllers
 
         private void SaveScore(string result, User user) //playerstat model expects "win" or anything else.
         {
-            ScoreDAOService scoreService = new ScoreDAOService();
-            PlayerStat newScore = new PlayerStat
+            try
             {
-                Difficulty = "Normal",
-                PlayerName = user.FirstName + " " + user.LastName,
-                GameResult = result,
-                Clicks = myBoard.Clicks,
-                FlaggedBombCount = GetFlaggedBombCount()
-            };
-            newScore.CalculateScore();
-            scoreService.SaveScore(user, newScore);
-            user.Stats.Add(newScore);
+                ScoreDAOService scoreService = new ScoreDAOService();
+                PlayerStat newScore = new PlayerStat
+                {
+                    Difficulty = "Normal",
+                    PlayerName = user.FirstName + " " + user.LastName,
+                    GameResult = result,
+                    Clicks = myBoard.Clicks,
+                    FlaggedBombCount = GetFlaggedBombCount()
+                };
+                newScore.CalculateScore();
+                scoreService.SaveScore(user, newScore);
+                user.Stats.Add(newScore);
+                logger.Info("MinesweeperController SaveScore(), Saved score to DB and user object.");
+            }
+            catch
+            {
+                logger.Error("MinesweeperController SaveScore(), Failure.");
+            }
         }
 
         private int GetFlaggedBombCount()
@@ -171,6 +193,8 @@ namespace CST247CLC.Controllers
                 if (item.IsFlagged)
                     flaggedBombCountNum++;
             }
+
+            logger.Info("MinesweeperController GetFlaggedBombCount(), returning bomb count.");
             return flaggedBombCountNum;
         }
 
@@ -184,6 +208,8 @@ namespace CST247CLC.Controllers
                 gameDAO.SaveGame(user, myBoard);
                 //then update the session
                 Session["User"] = user; //save to DB and inform the session
+
+                logger.Info("MinesweeperController OnGameSave(), Game saved.");
             }
             return PartialView("_Minesweeper", myBoard);
         }

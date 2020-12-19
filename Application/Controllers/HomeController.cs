@@ -22,6 +22,7 @@ namespace CST247CLC.Controllers
         {
             try
             {
+                logger.Info("Success at HomeController Index().");
                 return View("Home");
             }
             catch
