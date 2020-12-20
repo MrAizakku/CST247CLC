@@ -6,10 +6,10 @@
 <h2>
      Minesweeper
 </h2>
- @DateTime.Now
+ Today: @DateTime.Now.ToShortDateString()
 <br />
 
 <div id="gameboard">
-    @Html.Partial("_Minesweeper", Model);
+    @Html.Partial("_Minesweeper", Model)
 </div>
 

@@ -1,0 +1,35 @@
+﻿@model List<MinesweeperModels.PlayerStat>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(m => Model[0].PlayerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(m => Model[0].Difficulty)
+        </th>
+        <th>
+            @Html.DisplayNameFor(m => Model[0].Clicks)
+        </th>
+        <th>
+            @Html.DisplayNameFor(m => Model[0].Score)
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(m => item.PlayerName)
+        </td>
+        <td>
+            @Html.DisplayFor(m => item.Difficulty)
+        </td>
+        <td>
+            @Html.DisplayFor(m => item.Clicks)
+        </td>
+        <td>
+            @Html.DisplayFor(m => item.Score)
+        </td>
+    </tr>
+    }
+</table>

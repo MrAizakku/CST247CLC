@@ -12,54 +12,62 @@
         });
         $('.minesweeper').mousedown(function (event) {
             if (event.which == 3) {
-                console.log("event 3. right click");
-                //URL, DATA, callback
-                $.post("@Url.Action("OnButtonRightClick", "Minesweeper")", {mine: this.getAttribute("value")}, function (data) {
-                    console.log(data);
-                    $("#gameboard").html(data);
-                });
+                if ($(this).find('img').attr('src') == '/Images/q.png' || $(this).find('img').attr('src') == '/Images/f.png') {
+                    var selected = this;
+                    //URL, DATA, callback
+                    $.post("@Url.Action("OnButtonRightClick", "Minesweeper")", { mine: this.getAttribute("value") }, function (data) {
+                        $(selected).find('img').attr('src', data);
+                        //$("#gameboard").html(data);
+                    });
+                }
             }
         });
     });
 </script>
-@Model.gameAlert
+@Model.GameAlert
+<br />
+Board From: @Model.TimeStarted
 
 @using (Ajax.BeginForm("OnButtonClick", "Minesweeper", ajaxOptions))
 {
-    for (int row = Model.size - 1; row >= 0; --row)
+    for (int row = Model.Size - 1; row >= 0; --row)
     {
-        for (int column = 0; column < Model.size; column++)
+        for (int column = 0; column < Model.Size; column++)
         {
             string MineID = row + "|" + column;
-            string image = Model.grid[row, column].numOfLiveNeighbors + ".png";
-            if (column % Model.size == 0)
+            string image = Model.Grid[row, column].NumOfLiveNeighbors + ".png";
+            if (column % Model.Size == 0)
             {
                 <br />
             }
 
-            <button class="minesweeper" type="submit" name="mine" value=@MineID>
-                @if (Model.grid[row, column].isVisited)
+            <button class="minesweeper" type="submit" name="mine" value=@MineID style="width:40px;height:40px;">
+                @if (Model.Grid[row, column].IsVisited)
                 {
-                    if (Model.grid[row, column].isLive)
+                    if (Model.Grid[row, column].IsLive)
                     {
-                        <img src="~/Images/b.png" style="width:30px;height:30px;" />
+                        <img src="~/Images/b.png" id="pic" style="width:30px;height:30px;" />
                     }
                     else
                     {
-                        <img src="~/Images/@image" style="width:30px;height:30px;" />
+                        <img src="~/Images/@image" id="pic" style="width:30px;height:30px;" />
                     }
                 }
-                else if (Model.grid[row, column].isFlagged)
+                else if (Model.Grid[row, column].IsFlagged)
                 {
-                    <img src="~/Images/f.png" style="width:30px;height:30px;" />
+                    <img src="~/Images/f.png" id="pic" style="width:30px;height:30px;" />
                 }
                 else
                 {
-                    <img src="~/Images/q.png" style="width:30px;height:30px;" />
+                    <img src="~/Images/q.png" id="pic" style="width:30px;height:30px;" />
                 }
 
             </button>
         }
 
     }
+}
+@using (Ajax.BeginForm("onGameSave", "Minesweeper", ajaxOptions))
+{
+    <input type="submit" value="Save Game" />
 }
